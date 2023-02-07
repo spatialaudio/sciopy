@@ -1,0 +1,14 @@
+LICENSE
+README.md
+setup.py
+sciopy/__init__.py
+sciopy/com_handling.py
+sciopy/configurations.py
+sciopy/doteit.py
+sciopy/print_command_info.py
+sciopy/sciopy_dataclasses.py
+sciopy/setup_m.py
+sciopy.egg-info/PKG-INFO
+sciopy.egg-info/SOURCES.txt
+sciopy.egg-info/dependency_links.txt
+sciopy.egg-info/top_level.txt

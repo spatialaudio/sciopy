@@ -72,6 +72,12 @@ It can be used for the transformation between .eit and .npz files for further pr
     - GetFirmwareIDs()
 
 
+## ToDo:
+
+- Insert unknown parameter in `doteit.py`
+- Add the type of a serial connection `type(serial)`
+
+
 ## Version
 
     1.0

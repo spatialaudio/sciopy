@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: sciopy
+Version: 0.1
+Summary: Python based interface module for serial communication with the ScioSpec Electrical Impedance Tomography (EIT) device.
+Author: Jacob Peter Thönes
+Author-email: jacob.thoenes@uni-rostock.de
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+License-File: LICENSE
+
+UNKNOWN
+
