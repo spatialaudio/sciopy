@@ -1,9 +1,14 @@
-"""
-sciopy: Python based interface module for ScioSpec Electrical Impedance Tomography device.
-"""
+import setuptools
 
-__author__ = "Jacob Peter Thönes"
-__author_email__ = "jacob.thoenes@uni-rostock.de"
-APP_NAME = "sciopy"
-APP_VERSION = "1.0.0"
-APP_DESCRIPTION = "A Python Package for ScioSpec EIT (electrical impedance tomography) system with 16, 32, 64, 128 or 256 channels"
+setuptools.setup(
+    name="sciopy",
+    version="0.1",
+    author="Jacob Peter Thönes",
+    author_email="jacob.thoenes@uni-rostock.de",
+    description="Python based interface module for serial communication with the ScioSpec Electrical Impedance Tomography (EIT) device.",
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+)
