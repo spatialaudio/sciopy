@@ -45,9 +45,6 @@ It can be used for the transformation between .eit and .npz files for further pr
 
 ### `setup_m.py`
 
-**(WIP)** Programming goal: Handling of the data stream within a serial connection of the ScioSpecEIT device.
-
-
     - SystemMessageCallback()
     - SaveSettings()
     - SoftwareReset()
@@ -75,12 +72,21 @@ It can be used for the transformation between .eit and .npz files for further pr
     - GetDevideInfo()
     - GetFirmwareIDs()
 
+### `configurations.py`
 
-## ToDo:
+Different standard measurement configurations. See the docstring to get further information about the defined settings.
+
+    - configuration_01()
+    - configuration_02()
+    - configuration_03()
+    - configuration_04()
+    - configuration_05()
+
+## TBD:
 
 - Insert unknown parameter in `doteit.py`
 - Add the type of a serial connection `type(serial)`
-
+- Implement the function `configure_configuration()`
 
 ## Version
 
