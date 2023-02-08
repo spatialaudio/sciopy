@@ -84,7 +84,7 @@ It can be used for the transformation between .eit and .npz files for further pr
 
 ## Version
 
-    1.0
+    0.2.2
 
 ## Contact
 
