@@ -1,7 +1,8 @@
 Metadata-Version: 2.1
 Name: sciopy
-Version: 0.1
+Version: 0.2
 Summary: Python based interface module for serial communication with the ScioSpec Electrical Impedance Tomography (EIT) device.
+Home-page: https://github.com/spatialaudio/sciopy.git
 Author: Jacob Peter Thönes
 Author-email: jacob.thoenes@uni-rostock.de
 License: UNKNOWN
