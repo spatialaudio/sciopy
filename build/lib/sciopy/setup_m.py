@@ -480,7 +480,7 @@ def parse_to_full_frame(measurement_data: np.ndarray) -> np.ndarray:
         full data frame
     """
     data_frame = []
-    for i, sf in enumerate(measurement_data):
+    for sf in measurement_data:
         data_frame.append(parse_single_frame(sf))
     return np.array(data_frame)
 
