@@ -32,7 +32,7 @@ class SingleFrame:
 @dataclass
 class ScioSpecMeasurementConfig:
     com_port: str
-    sample_per_step: int
+    burst_count: int
     actual_sample: int
     s_path: str
     object: str
