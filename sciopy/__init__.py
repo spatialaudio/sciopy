@@ -52,7 +52,14 @@ from .setup_m import (
     GetFirmwareIDs,
 )
 
-from .configurations import configuration_01
+from .configurations import (
+    configuration_01,
+    configuration_02,
+    configuration_03,
+    configuration_04,
+    configuration_05,
+    configure_configuration,
+)
 
 
 # TBD from .configurations import configuration_01
@@ -105,4 +112,9 @@ __all__ = [
     "GetFirmwareIDs",
     # .configurations
     "configuration_01",
+    "configuration_02",
+    "configuration_03",
+    "configuration_04",
+    "configuration_05",
+    "configure_configuration",
 ]

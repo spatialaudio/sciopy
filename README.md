@@ -1,6 +1,6 @@
 # ScioPY
 
-This package offers the serial interface for communication with an EIT device from ScioSpec.\n Commands can be written serially and the system response can be read out.\n With the current version, it is possible to start and stop measurements with defined burst counts and to read out the measurement data. In addition, the measurement data is packed into a data class for better further processing.
+This package offers the serial interface for communication with an EIT device from ScioSpec. Commands can be written serially and the system response can be read out. With the current version, it is possible to start and stop measurements with defined burst counts and to read out the measurement data. In addition, the measurement data is packed into a data class for better further processing.
 
 ## Install Requirements
 
@@ -10,7 +10,7 @@ All requirements are provided inside the `requirements.txt`. To install them nav
     pip install -r requirements.txt  # Windows
 
 
-## Existing Python files
+## Provided Python files and functions
 
 ### `com_handling.py`
 
@@ -84,7 +84,7 @@ It can be used for the transformation between .eit and .npz files for further pr
 
 ## Version
 
-    0.2.4
+    0.2.5
 
 ## Contact
 
