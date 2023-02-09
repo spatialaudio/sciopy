@@ -51,6 +51,7 @@ It can be used for the transformation between .eit and .npz files for further pr
     - ResetMeasurementSetup()
     - SetMeasurementSetup()
     - GetMeasurementSetup()
+    - SetBurstCount()
     - StartStopMeasurement()
     - del_hex_in_list()
     - bytesarray_to_float()
@@ -90,7 +91,7 @@ Different standard measurement configurations. See the docstring to get further 
 
 ## Version
 
-    0.2.5
+    0.2.6
 
 ## Contact
 
