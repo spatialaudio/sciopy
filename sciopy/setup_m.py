@@ -2,7 +2,7 @@
 
 import struct
 from typing import Union, List
-from .sciopy_dataclasses import SingleFrame
+from .sciopy_dataclasses import SingleFrame, ScioSpecMeasurementConfig
 import numpy as np
 
 
@@ -270,6 +270,33 @@ def GetMeasurementSetup(serial) -> None:
     SystemMessageCallback(serial)  # [CT] 02 0C [Type] [CT]
 
 
+def SetBurstCount(serial, measuremen_cnf: ScioSpecMeasurementConfig) -> None:
+    """
+    Set the burst count to one of the provided values [1, 5, 10, 100].
+
+    Parameters
+    ----------
+    serial :
+        serial connection
+    measuremen_cnf : ScioSpecMeasurementConfig
+        dataclass object with configurations
+
+    Returns
+    -------
+    None
+    """
+    if measuremen_cnf.burst_count == 1:
+        serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x01, 0xB0]))
+    elif measuremen_cnf.burst_count == 5:
+        serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x05, 0xB0]))
+    elif measuremen_cnf.burst_count == 10:
+        serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x0A, 0xB0]))
+    elif measuremen_cnf.burst_count == 100:
+        serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x64, 0xB0]))
+    print(f"Set burst count to {measuremen_cnf.burst_count}.")
+    SystemMessageCallback(serial)
+
+
 def StartStopMeasurement(serial) -> list:
     """
     Start and stop the measurement and return the serial message buffer.
@@ -372,7 +399,9 @@ def bytesarray_to_byteslist(bytes_array: np.ndarray) -> list:
     return bytes(bytes_array)
 
 
-def reshape_burst_buffer(lst: np.ndarray, burst_count: int) -> list:
+def reshape_burst_buffer(
+    lst: np.ndarray, measuremen_cnf: ScioSpecMeasurementConfig
+) -> list:
     """
     Converts a bytes array to a list of bytes.
 
@@ -380,18 +409,21 @@ def reshape_burst_buffer(lst: np.ndarray, burst_count: int) -> list:
     ----------
     lst : np.ndarray
         measurement buffer
-    burst_count : int
-        number of measurements between start and stop command
+    measuremen_cnf : ScioSpecMeasurementConfig
+        dataclass object with configurations
 
     Returns
     -------
     list
         reshaped list of measured data
     """
-    full_frame_len, shape_x, shape_y = 17920, 128, 140
+    shapes_y = {"16": 70, "32": 140, "48": 210, "64": 280}
+    shape_y = shapes_y[f"{measuremen_cnf.n_el}"]
+
+    full_frame_len, shape_x = 17920, 128
     lst = lst[4:]
     full_frame = []
-    for burst in range(burst_count):
+    for burst in range(measuremen_cnf.burst_count):
         tmp_lst = lst[
             burst * full_frame_len : (burst + 1) * full_frame_len
         ]  # Select burst part

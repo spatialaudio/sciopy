@@ -33,6 +33,7 @@ class SingleFrame:
 class ScioSpecMeasurementConfig:
     com_port: str
     burst_count: int
+    n_el: int
     actual_sample: int
     s_path: str
     object: str

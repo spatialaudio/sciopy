@@ -1,7 +1,10 @@
 # TBD: https://stackoverflow.com/questions/3898572/what-are-the-most-common-python-docstring-formats
+from .sciopy_dataclasses import ScioSpecMeasurementConfig
 
 
-def configuration_01(serial) -> None:
+def configuration_01(
+    serial, cnf: ScioSpecMeasurementConfig
+) -> ScioSpecMeasurementConfig:
     """
     Standart SioSpce configuration template.
 
@@ -86,8 +89,19 @@ def configuration_01(serial) -> None:
     serial.write(bytearray([0xB2, 0x02, 0x03, 0x01, 0xB2]))
     serial.write(bytearray([0xB2, 0x02, 0x02, 0x01, 0xB2]))
 
+    return ScioSpecMeasurementConfig(
+        serial.name,
+        burst_count=1,
+        n_el=32,
+        actual_sample=cnf.actual_sample,
+        s_path=cnf.s_path,
+        object=cnf.object,
+    )
 
-def configuration_02(serial) -> None:
+
+def configuration_02(
+    serial, cnf: ScioSpecMeasurementConfig
+) -> ScioSpecMeasurementConfig:
     """
     Amplitude [mA]      1.0
     Range [V]           +/-5
@@ -162,14 +176,25 @@ def configuration_02(serial) -> None:
     serial.write(bytearray([0xB2, 0x02, 0x03, 0x01, 0xB2]))
     serial.write(bytearray([0xB2, 0x02, 0x02, 0x01, 0xB2]))
 
+    return ScioSpecMeasurementConfig(
+        serial.name,
+        burst_count=5,
+        n_el=16,
+        actual_sample=cnf.actual_sample,
+        s_path=cnf.s_path,
+        object=cnf.object,
+    )
 
-def configuration_03(serial) -> None:
+
+def configuration_03(
+    serial, cnf: ScioSpecMeasurementConfig
+) -> ScioSpecMeasurementConfig:
     """
     Amplitude [mA]      1.0
     Range [V]           +/-1
     Framerate           1
     Gain                1
-    Burst Count         2
+    Burst Count         5
 
     Min f [Hz]          10_000
     Max f [Hz]          10_000
@@ -186,7 +211,7 @@ def configuration_03(serial) -> None:
     """
 
     serial.write(bytearray([0xB0, 0x01, 0x01, 0xB0]))
-    serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x02, 0xB0]))
+    serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x05, 0xB0]))
     serial.write(
         bytearray(
             [0xB0, 0x09, 0x05, 0x3F, 0x50, 0x62, 0x4D, 0xD2, 0xF1, 0xA9, 0xFC, 0xB0]
@@ -239,8 +264,19 @@ def configuration_03(serial) -> None:
     serial.write(bytearray([0xB2, 0x02, 0x03, 0x01, 0xB2]))
     serial.write(bytearray([0xB2, 0x02, 0x02, 0x01, 0xB2]))
 
+    return ScioSpecMeasurementConfig(
+        serial.name,
+        burst_count=5,
+        n_el=16,
+        actual_sample=cnf.actual_sample,
+        s_path=cnf.s_path,
+        object=cnf.object,
+    )
 
-def configuration_04(serial) -> None:
+
+def configuration_04(
+    serial, cnf: ScioSpecMeasurementConfig
+) -> ScioSpecMeasurementConfig:
     """
     Amplitude [mA]      1.0
     Range [V]           +/-5
@@ -332,14 +368,25 @@ def configuration_04(serial) -> None:
     serial.write(bytearray([0xB2, 0x02, 0x03, 0x01, 0xB2]))
     serial.write(bytearray([0xB2, 0x02, 0x02, 0x01, 0xB2]))
 
+    return ScioSpecMeasurementConfig(
+        serial.name,
+        burst_count=100,
+        n_el=32,
+        actual_sample=cnf.actual_sample,
+        s_path=cnf.s_path,
+        object=cnf.object,
+    )
 
-def configuration_05(serial) -> None:
+
+def configuration_05(
+    serial, cnf: ScioSpecMeasurementConfig
+) -> ScioSpecMeasurementConfig:
     """
     Amplitude [mA]      1.0
     Range [V]           +/-10
     Framerate           5
     Gain                1
-    Burst Count         3
+    Burst Count         10
 
     Min f [Hz]          10_000
     Max f [Hz]          10_000
@@ -356,7 +403,7 @@ def configuration_05(serial) -> None:
     """
 
     serial.write(bytearray([0xB0, 0x01, 0x01, 0xB0]))
-    serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x02, 0xB0]))
+    serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x0A, 0xB0]))
     serial.write(
         bytearray(
             [0xB0, 0x09, 0x05, 0x3F, 0x50, 0x62, 0x4D, 0xD2, 0xF1, 0xA9, 0xFC, 0xB0]
@@ -457,7 +504,16 @@ def configuration_05(serial) -> None:
     serial.write(bytearray([0xB2, 0x02, 0x03, 0x01, 0xB2]))
     serial.write(bytearray([0xB2, 0x02, 0x02, 0x01, 0xB2]))
 
+    return ScioSpecMeasurementConfig(
+        serial.name,
+        burst_count=10,
+        n_el=64,
+        actual_sample=cnf.actual_sample,
+        s_path=cnf.s_path,
+        object=cnf.object,
+    )
 
-def configure_configuration(serial) -> None:
+
+def configure_configuration(serial, cnf: ScioSpecMeasurementConfig) -> None:
     """TBD"""
     pass
