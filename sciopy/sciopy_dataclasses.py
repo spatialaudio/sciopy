@@ -6,7 +6,7 @@ import numpy as np
 @dataclass
 class SingleFrame:
     start_tag: List[str]
-    channel_group: str
+    channel_group: int
     excitation_stgs: List[str]
     frequency_row: List[str]
     timestamp: int  # [ms]
@@ -34,6 +34,7 @@ class ScioSpecMeasurementConfig:
     com_port: str
     burst_count: int
     n_el: int
+    channel_group: list
     actual_sample: int
     s_path: str
     object: str
