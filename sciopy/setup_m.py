@@ -399,38 +399,6 @@ def bytesarray_to_byteslist(bytes_array: np.ndarray) -> list:
     return bytes(bytes_array)
 
 
-def reshape_burst_buffer(
-    lst: np.ndarray, measuremen_cnf: ScioSpecMeasurementConfig
-) -> list:
-    """
-    Converts a bytes array to a list of bytes.
-
-    Parameters
-    ----------
-    lst : np.ndarray
-        measurement buffer
-    measuremen_cnf : ScioSpecMeasurementConfig
-        dataclass object with configurations
-
-    Returns
-    -------
-    list
-        reshaped list of measured data
-    """
-    shapes_y = {"16": 70, "32": 140, "48": 210, "64": 280}
-    shape_y = shapes_y[f"{measuremen_cnf.n_el}"]
-
-    full_frame_len, shape_x = 17920, 128
-    lst = lst[4:]
-    full_frame = []
-    for burst in range(measuremen_cnf.burst_count):
-        tmp_lst = lst[
-            burst * full_frame_len : (burst + 1) * full_frame_len
-        ]  # Select burst part
-        full_frame.append(tmp_lst.reshape(shape_x, shape_y))
-    return full_frame
-
-
 def reduce_burst_to_less_x(
     brst_cnt: Union[int, list], leq: int = 100
 ) -> Union[List[int], int]:
@@ -497,24 +465,74 @@ def parse_single_frame(lst_ele: np.ndarray) -> SingleFrame:
     return sgl_frm
 
 
-def parse_to_full_frame(measurement_data: np.ndarray) -> np.ndarray:
+def reshape_full_message_in_bursts(
+    lst: list, cnf: ScioSpecMeasurementConfig
+) -> np.ndarray:
     """
-    Parses any measured byte representation into the dataclass SingleFrame.
-
+    Takes the full message buffer and splits this message depeding on the measurement configuration into the 
+    burst count parts.
+    
     Parameters
     ----------
-    measurement_data : np.ndarray
-        full stack measurement data
+    lst : list
+        full message buffer
+    cnf : ScioSpecMeasurementConfig
+        dataclass object configuration file
 
     Returns
     -------
     np.ndarray
-        full data frame
+        eit frame
+    
+    Examples
+    --------
+    - input: n_el=16 -> lst.shape=(44804) | n_el=32 -> lst.shape=(89604,)
+    - delete acknowledgement message: lst.shape=(4480,0) | lst.shape=(89600,)
+    - split this depending on burst count: split_list.shape=(5, 8960) | split_list.shape=(5, 17920)
     """
-    data_frame = []
-    for sf in measurement_data:
-        data_frame.append(parse_single_frame(sf))
-    return np.array(data_frame)
+    split_list = []
+    # delete acknowledgement message
+    lst = lst[4:]
+    # split in burst count messages
+    split_length = lst.shape[0] // cnf.burst_count
+    for split in range(cnf.burst_count):
+        split_list.append(lst[split * split_length : (split + 1) * split_length])
+    return np.array(split_list)
+
+
+def split_bursts_in_frames(
+    split_list: np.ndarray, cnf: ScioSpecMeasurementConfig
+) -> np.ndarray:
+    """
+    Takes the splitted list from `reshape_full_message_in_bursts()` and parses the single frames.
+
+    
+    Parameters
+    ----------
+    split_list : np.ndarray
+        splitted input list
+    cnf : ScioSpecMeasurementConfig
+        dataclass object configuration file
+
+    Returns
+    -------
+    np.ndarray
+        channel depending burst frames
+    """
+    msg_len = 140  # Constant
+    frame = []  # Channel group depending frame
+    burst_frame = []  # single burst count frame with channel depending frame
+    subframe_length = split_list.shape[1] // msg_len
+    for bursts in range(cnf.burst_count):  # Iterate over bursts
+        tmp_split_list = np.reshape(split_list[bursts], (subframe_length, msg_len))
+        for subframe in range(subframe_length):
+            parsed_sgl_frame = parse_single_frame(tmp_split_list[subframe])
+            # Select the right channel group data
+            if parsed_sgl_frame.channel_group in cnf.channel_group:
+                frame.append(parsed_sgl_frame)
+        burst_frame.append(frame)
+        frame = []  # Reset channel depending single burst frame
+    return np.array(burst_frame)
 
 
 def GetTemperature(serial) -> float:
