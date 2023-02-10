@@ -321,6 +321,25 @@ def StartStopMeasurement(serial) -> list:
     SystemMessageCallback(serial, prnt_msg=False, ret_hex_int="int")
     return measurement_data_hex
 
+def single_hex_to_int(str_num:str)->int:
+    """
+    Delete the hexadecimal 0x python notation.
+
+    Parameters
+    ----------
+    str_num : str
+        single hexadecimal string
+
+    Returns
+    -------
+    int
+        integer number
+    """
+    if len(str_num)==1:
+        str_num = f"0x0{str_num}"
+    else:
+        str_num = f"0x{str_num}"
+    return int(str_num,16)
 
 def del_hex_in_list(lst: list) -> np.ndarray:
     """
@@ -451,7 +470,7 @@ def parse_single_frame(lst_ele: np.ndarray) -> SingleFrame:
             bytesarray_to_float(lst_ele[i + 4 : i + 8]),
         )
 
-    excitation_stgs = np.array([ele for ele in lst_ele[3:5]])
+    excitation_stgs = np.array([single_hex_to_int(ele) for ele in lst_ele[3:5]])
 
     sgl_frm = SingleFrame(
         start_tag=lst_ele[0],

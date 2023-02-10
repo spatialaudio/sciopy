@@ -35,7 +35,7 @@ class SingleFrame:
 
     start_tag: str
     channel_group: int
-    excitation_stgs: List[str]
+    excitation_stgs: List[int]
     frequency_row: List[str]
     timestamp: int  # [ms]
     ch_1: complex
