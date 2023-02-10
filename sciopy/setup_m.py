@@ -469,9 +469,9 @@ def reshape_full_message_in_bursts(
     lst: list, cnf: ScioSpecMeasurementConfig
 ) -> np.ndarray:
     """
-    Takes the full message buffer and splits this message depeding on the measurement configuration into the 
+    Takes the full message buffer and splits this message depeding on the measurement configuration into the
     burst count parts.
-    
+
     Parameters
     ----------
     lst : list
@@ -483,7 +483,7 @@ def reshape_full_message_in_bursts(
     -------
     np.ndarray
         eit frame
-    
+
     Examples
     --------
     - input: n_el=16 -> lst.shape=(44804) | n_el=32 -> lst.shape=(89604,)
@@ -506,7 +506,7 @@ def split_bursts_in_frames(
     """
     Takes the splitted list from `reshape_full_message_in_bursts()` and parses the single frames.
 
-    
+
     Parameters
     ----------
     split_list : np.ndarray
