@@ -93,6 +93,7 @@ def configuration_01(
         serial.name,
         burst_count=1,
         n_el=32,
+        channel_group=cnf.channel_group,
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
@@ -180,6 +181,7 @@ def configuration_02(
         serial.name,
         burst_count=5,
         n_el=16,
+        channel_group=cnf.channel_group,
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
@@ -268,6 +270,7 @@ def configuration_03(
         serial.name,
         burst_count=5,
         n_el=16,
+        channel_group=cnf.channel_group,
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
@@ -372,6 +375,7 @@ def configuration_04(
         serial.name,
         burst_count=100,
         n_el=32,
+        channel_group=cnf.channel_group,
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
@@ -508,6 +512,7 @@ def configuration_05(
         serial.name,
         burst_count=10,
         n_el=64,
+        channel_group=cnf.channel_group,
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
@@ -517,3 +522,13 @@ def configuration_05(
 def configure_configuration(serial, cnf: ScioSpecMeasurementConfig) -> None:
     """TBD"""
     pass
+
+    return ScioSpecMeasurementConfig(
+        serial.name,
+        burst_count=10,
+        n_el=64,
+        channel_group=cnf.channel_group,
+        actual_sample=cnf.actual_sample,
+        s_path=cnf.s_path,
+        object=cnf.object,
+    )
