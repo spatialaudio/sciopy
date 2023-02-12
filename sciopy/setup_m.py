@@ -424,7 +424,7 @@ def reduce_burst_to_less_x(
     brst_cnt: Union[int, list], leq: int = 100
 ) -> Union[List[int], int]:
     """
-    Converts a bytes array to a list of bytes.
+    Reduces a given burst count to a list of numbers smaller than a defined border.
 
     Parameters
     ----------
@@ -446,6 +446,29 @@ def reduce_burst_to_less_x(
     if type(brst_cnt) == int and brst_cnt > leq:
         brst_cnt = [leq, brst_cnt - leq]
         reduce_burst_to_less_x(brst_cnt, leq)
+    return brst_cnt
+
+
+def reduce_burst_to_available_parts(
+    brst_cnt: int, leq_borders: list = [1, 5, 10, 100]
+) -> list:
+    """
+    Reduces a given burst count to a set of numbers in a defined burst count border list.
+
+    Parameters
+    ----------
+    burst_count : int
+        total number of planned measurements
+    leq_borders : list
+        list of available burst configurations
+
+    Returns
+    -------
+    list
+        burst counts that have to be configured
+    """
+    for brdrs in leq_borders[::-1]:
+        brst_cnt = reduce_burst_to_less_x(brst_cnt, brdrs)
     return brst_cnt
 
 

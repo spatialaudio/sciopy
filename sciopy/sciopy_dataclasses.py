@@ -54,6 +54,7 @@ class SingleFrame:
     end_tag : str       
         has to be 'b4'
     """
+
     start_tag: str
     channel_group: int
     excitation_stgs: List[int]
@@ -100,6 +101,7 @@ class ScioSpecMeasurementConfig:
     object : str
         selected measurement geometry
     """
+
     com_port: str
     burst_count: int
     n_el: int
