@@ -19,39 +19,39 @@ class SingleFrame:
         frequency row
     timestamp : int
         milli seconds
-    ch_1 : complex   
+    ch_1 : complex
         complex value of channel 1
-    ch_2 : complex   
+    ch_2 : complex
         complex value of channel 2
-    ch_3 : complex     
+    ch_3 : complex
         complex value of channel 3
-    ch_4 : complex   
+    ch_4 : complex
         complex value of channel 4
-    ch_5 : complex     
+    ch_5 : complex
         complex value of channel 5
-    ch_6 : complex     
+    ch_6 : complex
         complex value of channel 6
-    ch_7 : complex   
+    ch_7 : complex
         complex value of channel 7
-    ch_8 : complex     
+    ch_8 : complex
         complex value of channel 8
-    ch_9 : complex   
+    ch_9 : complex
         complex value of channel 9
-    ch_10 : complex   
+    ch_10 : complex
         complex value of channel 10
-    ch_11 : complex   
+    ch_11 : complex
         complex value of channel 11
-    ch_12 : complex   
+    ch_12 : complex
         complex value of channel 12
-    ch_13 : complex   
+    ch_13 : complex
         complex value of channel 13
-    ch_14 : complex   
+    ch_14 : complex
         complex value of channel 14
-    ch_15 : complex   
+    ch_15 : complex
         complex value of channel 15
-    ch_16 : complex   
+    ch_16 : complex
         complex value of channel 16
-    end_tag : str       
+    end_tag : str
         has to be 'b4'
     """
 
@@ -86,17 +86,17 @@ class ScioSpecMeasurementConfig:
 
     Parameters
     ----------
-    com_port : str  
+    com_port : str
         ScioSpec device com port
-    burst_count : int  
+    burst_count : int
         total number of measurements between start and stop command
-    n_el : int  
+    n_el : int
         total number of injecting electrodes
-    channel_group : list 
+    channel_group : list
         list of channel groups participating in the measurement
-    actual_sample : int  
+    actual_sample : int
         numbering of samples
-    s_path : str 
+    s_path : str
         savepath for the samples
     object : str
         selected measurement geometry
