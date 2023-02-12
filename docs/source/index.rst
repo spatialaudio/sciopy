@@ -5,4 +5,5 @@ ScioPy Documentation
 
    installation
    modules
+   contact
 
