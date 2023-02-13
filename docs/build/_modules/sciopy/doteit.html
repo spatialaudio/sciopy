@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sciopy.doteit &mdash; sciopy  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            sciopy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">sciopy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contact.html">Contact</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">sciopy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sciopy.doteit</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sciopy.doteit</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; Convert a .eit file to python sctructured data&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">.sciopy_dataclasses</span> <span class="kn">import</span> <span class="n">SingleEitFrame</span>
+
+
+<span class="n">header_keys</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;number_of_header&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;file_version_number&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;setup_name&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;date_time&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;f_min&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;f_max&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;f_scale&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;f_count&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;current_amplitude&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;framerate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;phase_correct_parameter&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;uknwn_1&quot;</span><span class="p">,</span>  <span class="c1"># TBD: Sadly an unknown parameter.</span>
+    <span class="s2">&quot;uknwn_2&quot;</span><span class="p">,</span>  <span class="c1"># TBD: Sadly an unknown parameter.</span>
+    <span class="s2">&quot;uknwn_3&quot;</span><span class="p">,</span>  <span class="c1"># TBD: Sadly an unknown parameter.</span>
+    <span class="s2">&quot;uknwn_4&quot;</span><span class="p">,</span>  <span class="c1"># TBD: Sadly an unknown parameter.</span>
+    <span class="s2">&quot;uknwn_5&quot;</span><span class="p">,</span>  <span class="c1"># TBD: Sadly an unknown parameter.</span>
+    <span class="s2">&quot;MeasurementChannels&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MeasurementChannelsIndependentFromInjectionPattern&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="doteit_in_SingleEitFrame"><a class="viewcode-back" href="../../sciopy.html#sciopy.doteit.doteit_in_SingleEitFrame">[docs]</a><span class="k">def</span> <span class="nf">doteit_in_SingleEitFrame</span><span class="p">(</span><span class="n">read_content</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SingleEitFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns single object without saving anything.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    read_content : list</span>
+<span class="sd">        the 1st param name `first`</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    SingleEitFrame</span>
+<span class="sd">        class object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">SingleEitFrame</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">content</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">read_content</span><span class="p">,</span> <span class="n">header_keys</span><span class="p">):</span>
+        <span class="c1"># Inserting header part</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">content</span><span class="p">)</span>
+    <span class="n">frame</span><span class="o">.</span><span class="n">f_scale</span> <span class="o">=</span> <span class="s2">&quot;linear&quot;</span> <span class="k">if</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_scale</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;logarithmic&quot;</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">header_keys</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">read_content</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">el_cmb</span> <span class="o">=</span> <span class="n">read_content</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="n">el_cmb</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">el_cmb</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">el_cmb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">lct</span> <span class="o">=</span> <span class="n">read_content</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">lct</span> <span class="o">=</span> <span class="p">[</span><span class="n">ele</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;e&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">lct</span><span class="p">]</span>
+        <span class="n">lct</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">ele</span><span class="p">)</span> <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">lct</span><span class="p">]</span>
+        <span class="n">fin_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lct</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cmpl</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">lct</span><span class="p">),</span> <span class="mi">2</span><span class="p">)):</span>
+            <span class="n">fin_val</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span><span class="n">lct</span><span class="p">[</span><span class="n">cmpl</span><span class="p">],</span> <span class="n">lct</span><span class="p">[</span><span class="n">cmpl</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">el_cmb</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fin_val</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">frame</span></div>
+
+
+<div class="viewcode-block" id="list_eit_files"><a class="viewcode-back" href="../../sciopy.html#sciopy.doteit.list_eit_files">[docs]</a><span class="k">def</span> <span class="nf">list_eit_files</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a list of all .eit files in the directory path.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str</span>
+<span class="sd">        Path to the directory</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        list of files with .eit ending</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">src_list</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">src_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">_</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.eit&quot;</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">src_list</span>
+    <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Can not find a .eit file in:</span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="list_all_files"><a class="viewcode-back" href="../../sciopy.html#sciopy.doteit.list_all_files">[docs]</a><span class="k">def</span> <span class="nf">list_all_files</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print a list of all files inside a directory.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str</span>
+<span class="sd">        path to the directory</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="single_eit_in_pickle"><a class="viewcode-back" href="../../sciopy.html#sciopy.doteit.single_eit_in_pickle">[docs]</a><span class="k">def</span> <span class="nf">single_eit_in_pickle</span><span class="p">(</span><span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">s_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dumps the .eit information to a pickle file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname : str</span>
+<span class="sd">        name of the file</span>
+<span class="sd">    s_path : str</span>
+<span class="sd">        save path</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">read_content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">doteit_in_SingleEitFrame</span><span class="p">(</span><span class="n">read_content</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">s_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">frame</span><span class="o">.</span><span class="n">setup_name</span><span class="si">}</span><span class="s2">.pickle&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_pickle_to_dict"><a class="viewcode-back" href="../../sciopy.html#sciopy.doteit.load_pickle_to_dict">[docs]</a><span class="k">def</span> <span class="nf">load_pickle_to_dict</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a pickle file into a python dictionary.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str</span>
+<span class="sd">        path to the file</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        dicionary of the loaded pickle file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="vm">__dict__</span>
+    <span class="k">return</span> <span class="n">tmp</span></div>
+
+
+<div class="viewcode-block" id="convert_fulldir_doteit_to_pickle"><a class="viewcode-back" href="../../sciopy.html#sciopy.doteit.convert_fulldir_doteit_to_pickle">[docs]</a><span class="k">def</span> <span class="nf">convert_fulldir_doteit_to_pickle</span><span class="p">(</span><span class="n">lpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">spath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts all .eit files in a directory to .pickle files in a directory spath.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lpath : str</span>
+<span class="sd">        load path</span>
+<span class="sd">    spath : str</span>
+<span class="sd">        save path</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">list_eit_files</span><span class="p">(</span><span class="n">lpath</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">lpath</span> <span class="o">+</span> <span class="n">obj</span>
+        <span class="n">single_eit_in_pickle</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">spath</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;converted:&quot;</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> Saved in&quot;</span><span class="p">,</span> <span class="n">spath</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="convert_fulldir_doteit_to_npz"><a class="viewcode-back" href="../../sciopy.html#sciopy.doteit.convert_fulldir_doteit_to_npz">[docs]</a><span class="k">def</span> <span class="nf">convert_fulldir_doteit_to_npz</span><span class="p">(</span><span class="n">lpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">spath</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts all .eit files in a directory to .npz files in a directory spath.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lpath : str</span>
+<span class="sd">        load path</span>
+<span class="sd">    spath : str</span>
+<span class="sd">        save path</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">list_eit_files</span><span class="p">(</span><span class="n">lpath</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">lpath</span> <span class="o">+</span> <span class="n">obj</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">read_content</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">doteit_in_SingleEitFrame</span><span class="p">(</span><span class="n">read_content</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">savez</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">spath</span><span class="si">}{</span><span class="n">frame</span><span class="o">.</span><span class="n">setup_name</span><span class="si">}</span><span class="s2">.npz&quot;</span><span class="p">,</span> <span class="o">**</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Jacob Peter Thönes.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

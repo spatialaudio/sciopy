@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sciopy.setup_m &mdash; sciopy  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            sciopy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">sciopy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contact.html">Contact</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">sciopy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sciopy.setup_m</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sciopy.setup_m</h1><div class="highlight"><pre>
+<span></span><span class="c1"># TBD: https://stackoverflow.com/questions/3898572/what-are-the-most-common-python-docstring-formats</span>
+
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">.sciopy_dataclasses</span> <span class="kn">import</span> <span class="n">SingleFrame</span><span class="p">,</span> <span class="n">ScioSpecMeasurementConfig</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="SystemMessageCallback"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.SystemMessageCallback">[docs]</a><span class="k">def</span> <span class="nf">SystemMessageCallback</span><span class="p">(</span>
+    <span class="n">serial</span><span class="p">,</span> <span class="n">prnt_msg</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">ret_hex_int</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reads the message buffer of a serial connection. Also prints out the general system message.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+<span class="sd">    prnt_msg : bool</span>
+<span class="sd">        if true print message, if false not</span>
+<span class="sd">    ret_hex_int : Union[None, str]</span>
+<span class="sd">        use [&#39;none&#39;,&#39;hex&#39;, &#39;int&#39;, &#39;both&#39;] to return nothing, hex or integer data or both.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    [None, received_hex, received, (received, received_hex)]</span>
+<span class="sd">        return depens on the ret_hex_int variable</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">msg_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;0x01&quot;</span><span class="p">:</span> <span class="s2">&quot;No message inside the message buffer&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;0x02&quot;</span><span class="p">:</span> <span class="s2">&quot;Timeout: Communication-timeout (less data than expected)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;0x04&quot;</span><span class="p">:</span> <span class="s2">&quot;Wake-Up Message: System boot ready&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;0x11&quot;</span><span class="p">:</span> <span class="s2">&quot;TCP-Socket: Valid TCP client-socket connection&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;0x81&quot;</span><span class="p">:</span> <span class="s2">&quot;Not-Acknowledge: Command has not been executed&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;0x82&quot;</span><span class="p">:</span> <span class="s2">&quot;Not-Acknowledge: Command could not be recognized&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;0x83&quot;</span><span class="p">:</span> <span class="s2">&quot;Command-Acknowledge: Command has been executed successfully&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;0x84&quot;</span><span class="p">:</span> <span class="s2">&quot;System-Ready Message: System is operational and ready to receive data&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;0x91&quot;</span><span class="p">:</span> <span class="s2">&quot;Data holdup: Measurement data could not be sent via the master interface&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">timeout_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">received</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">received_hex</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">data_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">serial</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">buffer</span><span class="p">:</span>
+            <span class="n">received</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+            <span class="n">data_count</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+            <span class="n">timeout_count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">continue</span>
+        <span class="n">timeout_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">timeout_count</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Break if we haven&#39;t received any data</span>
+            <span class="k">break</span>
+
+        <span class="n">received</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">received</span><span class="p">))</span>  <span class="c1"># If you need all the data</span>
+    <span class="n">received_hex</span> <span class="o">=</span> <span class="p">[</span><span class="nb">hex</span><span class="p">(</span><span class="n">receive</span><span class="p">)</span> <span class="k">for</span> <span class="n">receive</span> <span class="ow">in</span> <span class="n">received</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">msg_idx</span> <span class="o">=</span> <span class="n">received_hex</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;0x18&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prnt_msg</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">msg_dict</span><span class="p">[</span><span class="n">received_hex</span><span class="p">[</span><span class="n">msg_idx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]])</span>
+    <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">prnt_msg</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">msg_dict</span><span class="p">[</span><span class="s2">&quot;0x01&quot;</span><span class="p">])</span>
+        <span class="n">prnt_msg</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">prnt_msg</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;message buffer:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">received_hex</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;message length:</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">data_count</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ret_hex_int</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">elif</span> <span class="n">ret_hex_int</span> <span class="o">==</span> <span class="s2">&quot;hex&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">received_hex</span>
+    <span class="k">elif</span> <span class="n">ret_hex_int</span> <span class="o">==</span> <span class="s2">&quot;int&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">received</span>
+    <span class="k">elif</span> <span class="n">ret_hex_int</span> <span class="o">==</span> <span class="s2">&quot;both&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">received</span><span class="p">,</span> <span class="n">received_hex</span></div>
+
+
+<div class="viewcode-block" id="SaveSettings"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.SaveSettings">[docs]</a><span class="k">def</span> <span class="nf">SaveSettings</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save the settings inside the ScioSpec device.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0x90</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x90</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SoftwareReset"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.SoftwareReset">[docs]</a><span class="k">def</span> <span class="nf">SoftwareReset</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reset the ScioSpec software.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xA1</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0xA1</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ResetMeasurementSetup"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.ResetMeasurementSetup">[docs]</a><span class="k">def</span> <span class="nf">ResetMeasurementSetup</span><span class="p">(</span><span class="n">serial</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reset the measurement setup.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SetMeasurementSetup"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.SetMeasurementSetup">[docs]</a><span class="k">def</span> <span class="nf">SetMeasurementSetup</span><span class="p">(</span>
+    <span class="n">serial</span><span class="p">,</span>
+    <span class="n">burst_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">frame_rate</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">exc_freq</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="n">exc_amp</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Configurate and write own measurement setup.</span>
+<span class="sd">    -&gt;!!! TBD !!!&lt;-</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection to the ScioSpecEIT device.</span>
+<span class="sd">    burst_count : int</span>
+<span class="sd">        number of measurement between start and stop command.</span>
+<span class="sd">    frame_rate : int</span>
+<span class="sd">        number of measurements per second.</span>
+<span class="sd">    exc_freq : list</span>
+<span class="sd">        [fmin, fmax, fcount, ftype] add excitation frequency block in Hz.</span>
+<span class="sd">    exc_amp : float</span>
+<span class="sd">        Set excitation amplitude in ampere.</span>
+
+<span class="sd">    Further information</span>
+<span class="sd">    -------------------</span>
+
+<span class="sd">    [fmin]</span>
+<span class="sd">        • minimum frequency fmin</span>
+<span class="sd">        • 4 Byte floating point single precision value</span>
+<span class="sd">        • range = 100 Hz - 10 MHz</span>
+<span class="sd">        • Default: fmin = 100 kHz</span>
+<span class="sd">    [fmax]</span>
+<span class="sd">        • maximum frequency fmax</span>
+<span class="sd">        • 4 Byte floating point single precision value</span>
+<span class="sd">        • range = 100 Hz - 10 MHz</span>
+<span class="sd">        • Default: fmax = 100 kHz</span>
+<span class="sd">    [fcount]</span>
+<span class="sd">        • frequency count fcount</span>
+<span class="sd">        • 2 Byte unsigned integer value</span>
+<span class="sd">        • range = 1 - 128</span>
+<span class="sd">        • Default: fcount = 1</span>
+<span class="sd">    [ftype]</span>
+<span class="sd">        • frequency type ftype</span>
+<span class="sd">        • 1 Byte unsigned interger value</span>
+<span class="sd">        • ftype = 0: linear frequency distribution | 1: logarithmic frequency distribution</span>
+<span class="sd">        • Default: ftype = 0</span>
+<span class="sd">    [excitation amplitude]</span>
+<span class="sd">        • 8 Byte Floating Point double precision value.</span>
+<span class="sd">        • Amin = 100 nA</span>
+<span class="sd">        • Amax = 10 mA</span>
+<span class="sd">        • Step size see Chapter “Technical Specification”</span>
+<span class="sd">        • Default: A = 0.01 A</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">write_part</span><span class="p">(</span><span class="n">serial</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">burst_count</span> <span class="o">&lt;=</span> <span class="mi">255</span><span class="p">:</span>
+        <span class="n">burst_count</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="n">burst_count</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">])</span>
+        <span class="n">write_part</span><span class="p">(</span><span class="n">serial</span><span class="p">,</span> <span class="n">burst_count</span><span class="p">)</span>
+
+    <span class="n">frame_rate</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x05</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="n">frame_rate</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">])</span>
+    <span class="n">write_part</span><span class="p">(</span><span class="n">serial</span><span class="p">,</span> <span class="n">frame_rate</span><span class="p">)</span>
+
+    <span class="n">exc_freq</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span>
+        <span class="p">[</span><span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x0C</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="n">exc_freq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">exc_freq</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">exc_freq</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">exc_freq</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="mh">0xB0</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">write_part</span><span class="p">(</span><span class="n">serial</span><span class="p">,</span> <span class="n">exc_freq</span><span class="p">)</span>
+
+    <span class="c1"># exc_amp = bytearray([0xB0, 0x05, 0x05, exc_amp, 0xB0])</span>
+    <span class="c1"># write_part(serial, exc_amp)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Setup done&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GetMeasurementSetup"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.GetMeasurementSetup">[docs]</a><span class="k">def</span> <span class="nf">GetMeasurementSetup</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print information about the current configuration.</span>
+<span class="sd">    -&gt;!!! TBD !!!&lt;-</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">burst_count</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB1</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0xB1</span><span class="p">])</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">burst_count</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Burst Count:&quot;</span><span class="p">)</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>  <span class="c1"># [CT] 03 02 [burst count] [CT]</span>
+
+    <span class="n">frame_rate</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB1</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0xB1</span><span class="p">])</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">frame_rate</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Frame Rate:&quot;</span><span class="p">)</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>  <span class="c1"># [CT] 05 03 [frame rate] [CT]</span>
+
+    <span class="n">exc_freq</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB1</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0xB1</span><span class="p">])</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">exc_freq</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Excitation Frequencies:&quot;</span><span class="p">)</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span>
+        <span class="n">serial</span>
+    <span class="p">)</span>  <span class="c1"># [CT] [LE] 04 [fmin 1st block] [fmax 1st block] [fcount 1st block] [ftype 1st block] [fmin 2nd block] [fmax 2nd block] [fcount 2nd block] [ftype 2nd block] ... [CT]</span>
+
+    <span class="n">exc_amp</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span>
+        <span class="p">[</span><span class="mh">0xB1</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x05</span><span class="p">,</span> <span class="mh">0xB1</span><span class="p">]</span>
+    <span class="p">)</span>  <span class="c1"># [CT] 05 05 [excitation amplitude] [CT]</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">exc_amp</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Excitation Amplitude:&quot;</span><span class="p">)</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>
+
+    <span class="n">exc_seq</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB1</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x06</span><span class="p">,</span> <span class="mh">0xB1</span><span class="p">])</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">exc_seq</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Excitation Sequence:&quot;</span><span class="p">)</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>  <span class="c1"># [CT] [LE] 06 [excitation sequence] [CT]</span>
+
+    <span class="n">meas_mode</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB1</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x08</span><span class="p">,</span> <span class="mh">0xB1</span><span class="p">])</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">meas_mode</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Measure Mode:&quot;</span><span class="p">)</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>  <span class="c1"># [CT] 03 08 [Mode] [Boundary] [CT]</span>
+
+    <span class="n">gain</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB1</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x09</span><span class="p">,</span> <span class="mh">0xB1</span><span class="p">])</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">gain</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gain Settings:&quot;</span><span class="p">)</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>  <span class="c1"># [CT] [LE] 09 [Mode] [Data] [CT]</span>
+
+    <span class="n">exc_switch</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB1</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x0C</span><span class="p">,</span> <span class="mh">0xB1</span><span class="p">])</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">exc_switch</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Excitation switch type:&quot;</span><span class="p">)</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>  <span class="c1"># [CT] 02 0C [Type] [CT]</span></div>
+
+
+<div class="viewcode-block" id="SetBurstCount"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.SetBurstCount">[docs]</a><span class="k">def</span> <span class="nf">SetBurstCount</span><span class="p">(</span><span class="n">serial</span><span class="p">,</span> <span class="n">measuremen_cnf</span><span class="p">:</span> <span class="n">ScioSpecMeasurementConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the burst count to one of the provided values [1, 5, 10, 100].</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+<span class="sd">    measuremen_cnf : ScioSpecMeasurementConfig</span>
+<span class="sd">        dataclass object with configurations</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">measuremen_cnf</span><span class="o">.</span><span class="n">burst_count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">]))</span>
+    <span class="k">elif</span> <span class="n">measuremen_cnf</span><span class="o">.</span><span class="n">burst_count</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x05</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">]))</span>
+    <span class="k">elif</span> <span class="n">measuremen_cnf</span><span class="o">.</span><span class="n">burst_count</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x0A</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">]))</span>
+    <span class="k">elif</span> <span class="n">measuremen_cnf</span><span class="o">.</span><span class="n">burst_count</span> <span class="o">==</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB0</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x64</span><span class="p">,</span> <span class="mh">0xB0</span><span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Set burst count to </span><span class="si">{</span><span class="n">measuremen_cnf</span><span class="o">.</span><span class="n">burst_count</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StartStopMeasurement"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.StartStopMeasurement">[docs]</a><span class="k">def</span> <span class="nf">StartStopMeasurement</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Start and stop the measurement and return the serial message buffer.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        message buffer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting measurement.&quot;</span><span class="p">)</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB4</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0xB4</span><span class="p">]))</span>
+    <span class="n">measurement_data_hex</span> <span class="o">=</span> <span class="n">SystemMessageCallback</span><span class="p">(</span>
+        <span class="n">serial</span><span class="p">,</span> <span class="n">prnt_msg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ret_hex_int</span><span class="o">=</span><span class="s2">&quot;hex&quot;</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stopping measurement.&quot;</span><span class="p">)</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xB4</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0xB4</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">,</span> <span class="n">prnt_msg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ret_hex_int</span><span class="o">=</span><span class="s2">&quot;int&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">measurement_data_hex</span></div>
+
+
+<div class="viewcode-block" id="single_hex_to_int"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.single_hex_to_int">[docs]</a><span class="k">def</span> <span class="nf">single_hex_to_int</span><span class="p">(</span><span class="n">str_num</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete the hexadecimal 0x python notation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    str_num : str</span>
+<span class="sd">        single hexadecimal string</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        integer number</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">str_num</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">str_num</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;0x0</span><span class="si">{</span><span class="n">str_num</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">str_num</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;0x</span><span class="si">{</span><span class="n">str_num</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">str_num</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="del_hex_in_list"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.del_hex_in_list">[docs]</a><span class="k">def</span> <span class="nf">del_hex_in_list</span><span class="p">(</span><span class="n">lst</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete the hexadecimal 0x python notation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lst : list</span>
+<span class="sd">        list of hexadecimals</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        cleared message</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="s2">&quot;0&quot;</span> <span class="o">+</span> <span class="n">ele</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;0x&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ele</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">ele</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;0x&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">lst</span>
+        <span class="p">]</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="bytesarray_to_float"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.bytesarray_to_float">[docs]</a><span class="k">def</span> <span class="nf">bytesarray_to_float</span><span class="p">(</span><span class="n">bytes_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a bytes array to a float number.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bytes_array : np.ndarray</span>
+<span class="sd">        array of bytes</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        double precision float</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bytes_array</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bytes_array</span><span class="p">]</span>
+    <span class="n">bytes_array</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">bytes_array</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;!f&quot;</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">bytes_array</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="bytesarray_to_int"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.bytesarray_to_int">[docs]</a><span class="k">def</span> <span class="nf">bytesarray_to_int</span><span class="p">(</span><span class="n">bytes_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a bytes array to int number.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bytes_array : np.ndarray</span>
+<span class="sd">        array of bytes</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        integer number</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bytes_array</span> <span class="o">=</span> <span class="n">bytesarray_to_byteslist</span><span class="p">(</span><span class="n">bytes_array</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">bytes_array</span><span class="p">,</span> <span class="s2">&quot;big&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="bytesarray_to_byteslist"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.bytesarray_to_byteslist">[docs]</a><span class="k">def</span> <span class="nf">bytesarray_to_byteslist</span><span class="p">(</span><span class="n">bytes_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a bytes array to a list of bytes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bytes_array : np.ndarray</span>
+<span class="sd">        array of bytes</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        list of bytes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bytes_array</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bytes_array</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">bytes_array</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="reduce_burst_to_less_x"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.reduce_burst_to_less_x">[docs]</a><span class="k">def</span> <span class="nf">reduce_burst_to_less_x</span><span class="p">(</span>
+    <span class="n">brst_cnt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">],</span> <span class="n">leq</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reduces a given burst count to a list of numbers smaller than a defined border.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    burst_count : Union[int, list]</span>
+<span class="sd">        number of planned measurements between start and stop command</span>
+<span class="sd">    leq : int</span>
+<span class="sd">        upper border of measurements between the start and stop commans</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[List[int], int]</span>
+<span class="sd">        burst count as number or list of numbers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">brst_cnt</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span> <span class="ow">and</span> <span class="n">brst_cnt</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">leq</span><span class="p">:</span>
+        <span class="n">rst</span> <span class="o">=</span> <span class="n">brst_cnt</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">leq</span>
+        <span class="n">brst_cnt</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">leq</span>
+        <span class="n">brst_cnt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rst</span><span class="p">)</span>
+        <span class="n">reduce_burst_to_less_x</span><span class="p">(</span><span class="n">brst_cnt</span><span class="p">,</span> <span class="n">leq</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">brst_cnt</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span> <span class="ow">and</span> <span class="n">brst_cnt</span> <span class="o">&gt;</span> <span class="n">leq</span><span class="p">:</span>
+        <span class="n">brst_cnt</span> <span class="o">=</span> <span class="p">[</span><span class="n">leq</span><span class="p">,</span> <span class="n">brst_cnt</span> <span class="o">-</span> <span class="n">leq</span><span class="p">]</span>
+        <span class="n">reduce_burst_to_less_x</span><span class="p">(</span><span class="n">brst_cnt</span><span class="p">,</span> <span class="n">leq</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">brst_cnt</span></div>
+
+
+<div class="viewcode-block" id="reduce_burst_to_available_parts"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.reduce_burst_to_available_parts">[docs]</a><span class="k">def</span> <span class="nf">reduce_burst_to_available_parts</span><span class="p">(</span>
+    <span class="n">brst_cnt</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">leq_borders</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reduces a given burst count to a set of numbers in a defined burst count border list.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    burst_count : int</span>
+<span class="sd">        total number of planned measurements</span>
+<span class="sd">    leq_borders : list</span>
+<span class="sd">        list of available burst configurations</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        burst counts that have to be configured</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">brdrs</span> <span class="ow">in</span> <span class="n">leq_borders</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">brst_cnt</span> <span class="o">=</span> <span class="n">reduce_burst_to_less_x</span><span class="p">(</span><span class="n">brst_cnt</span><span class="p">,</span> <span class="n">brdrs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">brst_cnt</span></div>
+
+
+<div class="viewcode-block" id="parse_single_frame"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.parse_single_frame">[docs]</a><span class="k">def</span> <span class="nf">parse_single_frame</span><span class="p">(</span><span class="n">lst_ele</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SingleFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse single data to the class SingleFrame.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lst_ele : np.ndarray</span>
+<span class="sd">        single measurement list element</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    SingleFrame</span>
+<span class="sd">        dataclass eit frame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">channels</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">enum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">135</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+        <span class="n">enum</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">channels</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;ch_</span><span class="si">{</span><span class="n">enum</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span>
+            <span class="n">bytesarray_to_float</span><span class="p">(</span><span class="n">lst_ele</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]),</span>
+            <span class="n">bytesarray_to_float</span><span class="p">(</span><span class="n">lst_ele</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">4</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">8</span><span class="p">]),</span>
+        <span class="p">)</span>
+
+    <span class="n">excitation_stgs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">single_hex_to_int</span><span class="p">(</span><span class="n">ele</span><span class="p">)</span> <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">lst_ele</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">]])</span>
+
+    <span class="n">sgl_frm</span> <span class="o">=</span> <span class="n">SingleFrame</span><span class="p">(</span>
+        <span class="n">start_tag</span><span class="o">=</span><span class="n">lst_ele</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">channel_group</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">lst_ele</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+        <span class="n">excitation_stgs</span><span class="o">=</span><span class="n">excitation_stgs</span><span class="p">,</span>
+        <span class="n">frequency_row</span><span class="o">=</span><span class="n">lst_ele</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">],</span>
+        <span class="n">timestamp</span><span class="o">=</span><span class="n">bytesarray_to_int</span><span class="p">(</span><span class="n">lst_ele</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">11</span><span class="p">]),</span>
+        <span class="o">**</span><span class="n">channels</span><span class="p">,</span>
+        <span class="n">end_tag</span><span class="o">=</span><span class="n">lst_ele</span><span class="p">[</span><span class="mi">139</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">sgl_frm</span></div>
+
+
+<div class="viewcode-block" id="reshape_full_message_in_bursts"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.reshape_full_message_in_bursts">[docs]</a><span class="k">def</span> <span class="nf">reshape_full_message_in_bursts</span><span class="p">(</span>
+    <span class="n">lst</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">cnf</span><span class="p">:</span> <span class="n">ScioSpecMeasurementConfig</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes the full message buffer and splits this message depeding on the measurement configuration into the</span>
+<span class="sd">    burst count parts.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lst : list</span>
+<span class="sd">        full message buffer</span>
+<span class="sd">    cnf : ScioSpecMeasurementConfig</span>
+<span class="sd">        dataclass object configuration file</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        eit frame</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    - input: n_el=16 -&gt; lst.shape=(44804) | n_el=32 -&gt; lst.shape=(89604,)</span>
+<span class="sd">    - delete acknowledgement message: lst.shape=(4480,0) | lst.shape=(89600,)</span>
+<span class="sd">    - split this depending on burst count: split_list.shape=(5, 8960) | split_list.shape=(5, 17920)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">split_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># delete acknowledgement message</span>
+    <span class="n">lst</span> <span class="o">=</span> <span class="n">lst</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span>
+    <span class="c1"># split in burst count messages</span>
+    <span class="n">split_length</span> <span class="o">=</span> <span class="n">lst</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="n">cnf</span><span class="o">.</span><span class="n">burst_count</span>
+    <span class="k">for</span> <span class="n">split</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cnf</span><span class="o">.</span><span class="n">burst_count</span><span class="p">):</span>
+        <span class="n">split_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lst</span><span class="p">[</span><span class="n">split</span> <span class="o">*</span> <span class="n">split_length</span> <span class="p">:</span> <span class="p">(</span><span class="n">split</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">split_length</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">split_list</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="split_bursts_in_frames"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.split_bursts_in_frames">[docs]</a><span class="k">def</span> <span class="nf">split_bursts_in_frames</span><span class="p">(</span>
+    <span class="n">split_list</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">cnf</span><span class="p">:</span> <span class="n">ScioSpecMeasurementConfig</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes the splitted list from `reshape_full_message_in_bursts()` and parses the single frames.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    split_list : np.ndarray</span>
+<span class="sd">        splitted input list</span>
+<span class="sd">    cnf : ScioSpecMeasurementConfig</span>
+<span class="sd">        dataclass object configuration file</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        channel depending burst frames</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">msg_len</span> <span class="o">=</span> <span class="mi">140</span>  <span class="c1"># Constant</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Channel group depending frame</span>
+    <span class="n">burst_frame</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># single burst count frame with channel depending frame</span>
+    <span class="n">subframe_length</span> <span class="o">=</span> <span class="n">split_list</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">msg_len</span>
+    <span class="k">for</span> <span class="n">bursts</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cnf</span><span class="o">.</span><span class="n">burst_count</span><span class="p">):</span>  <span class="c1"># Iterate over bursts</span>
+        <span class="n">tmp_split_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">split_list</span><span class="p">[</span><span class="n">bursts</span><span class="p">],</span> <span class="p">(</span><span class="n">subframe_length</span><span class="p">,</span> <span class="n">msg_len</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">subframe</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">subframe_length</span><span class="p">):</span>
+            <span class="n">parsed_sgl_frame</span> <span class="o">=</span> <span class="n">parse_single_frame</span><span class="p">(</span><span class="n">tmp_split_list</span><span class="p">[</span><span class="n">subframe</span><span class="p">])</span>
+            <span class="c1"># Select the right channel group data</span>
+            <span class="k">if</span> <span class="n">parsed_sgl_frame</span><span class="o">.</span><span class="n">channel_group</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">channel_group</span><span class="p">:</span>
+                <span class="n">frame</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parsed_sgl_frame</span><span class="p">)</span>
+        <span class="n">burst_frame</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Reset channel depending single burst frame</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">burst_frame</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GetTemperature"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.GetTemperature">[docs]</a><span class="k">def</span> <span class="nf">GetTemperature</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get temperature value.</span>
+
+<span class="sd">    -&gt;!!! TBD !!!&lt;-</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        temperature value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No temperature sensor available&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SetBatteryControll"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.SetBatteryControll">[docs]</a><span class="k">def</span> <span class="nf">SetBatteryControll</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set batterie controll.</span>
+
+<span class="sd">    -&gt;!!! TBD !!!&lt;-</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&gt;!!! TBD !!!&lt;-&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GetBatteryControll"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.GetBatteryControll">[docs]</a><span class="k">def</span> <span class="nf">GetBatteryControll</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get batterie controll information.</span>
+
+<span class="sd">    -&gt;!!! TBD !!!&lt;-</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&gt;!!! TBD !!!&lt;-&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SetLEDControl"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.SetLEDControl">[docs]</a><span class="k">def</span> <span class="nf">SetLEDControl</span><span class="p">(</span><span class="n">serial</span><span class="p">,</span> <span class="n">led</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Disable or enable auto mode.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+<span class="sd">    led : int</span>
+<span class="sd">        [1,2,3,4] led number</span>
+<span class="sd">    mode : str</span>
+<span class="sd">        [&#39;enable&#39;,&#39;disable&#39;] mode</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;disable&quot;</span><span class="p">:</span>
+        <span class="n">MODE</span> <span class="o">=</span> <span class="mh">0x00</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;enable&quot;</span><span class="p">:</span>
+        <span class="n">MODE</span> <span class="o">=</span> <span class="mh">0x01</span>
+
+    <span class="n">byte_arr</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xC8</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="n">led</span><span class="p">,</span> <span class="n">MODE</span><span class="p">,</span> <span class="mh">0xC8</span><span class="p">])</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">byte_arr</span><span class="p">)</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GetLEDControl"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.GetLEDControl">[docs]</a><span class="k">def</span> <span class="nf">GetLEDControl</span><span class="p">(</span><span class="n">serial</span><span class="p">,</span> <span class="n">led</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set a defined led to mode off, on or blink.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+<span class="sd">    led : int</span>
+<span class="sd">        [1,2,3,4] led number</span>
+<span class="sd">    mode : str</span>
+<span class="sd">        [&#39;enable&#39;,&#39;disable&#39;, &#39;blink&#39;] mode</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;disable&quot;</span><span class="p">:</span>
+        <span class="n">MODE</span> <span class="o">=</span> <span class="mh">0x00</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;enable&quot;</span><span class="p">:</span>
+        <span class="n">MODE</span> <span class="o">=</span> <span class="mh">0x01</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;blink&quot;</span><span class="p">:</span>
+        <span class="n">MODE</span> <span class="o">=</span> <span class="mh">0x02</span>
+
+    <span class="n">byte_arr</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xC8</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="n">led</span><span class="p">,</span> <span class="n">MODE</span><span class="p">,</span> <span class="mh">0xC8</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;sent:&quot;</span><span class="p">,</span> <span class="n">byte_arr</span><span class="p">)</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">byte_arr</span><span class="p">)</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SetLED_Mode"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.SetLED_Mode">[docs]</a><span class="k">def</span> <span class="nf">SetLED_Mode</span><span class="p">(</span><span class="n">serial</span><span class="p">,</span> <span class="n">led</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set a defined led to a mode.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+<span class="sd">    led : int</span>
+<span class="sd">        [1,2,3,4] led number</span>
+<span class="sd">    mode : str</span>
+<span class="sd">        [&#39;enable&#39;,&#39;disable&#39;, &#39;blink&#39;] mode</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Disable automode</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xC8</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="n">led</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0xC8</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;disable&quot;</span><span class="p">:</span>
+        <span class="n">MODE</span> <span class="o">=</span> <span class="mh">0x00</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;enable&quot;</span><span class="p">:</span>
+        <span class="n">MODE</span> <span class="o">=</span> <span class="mh">0x01</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;blink&quot;</span><span class="p">:</span>
+        <span class="n">MODE</span> <span class="o">=</span> <span class="mh">0x02</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xC8</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="n">led</span><span class="p">,</span> <span class="n">MODE</span><span class="p">,</span> <span class="mh">0xC8</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DisableLED_AutoMode"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.DisableLED_AutoMode">[docs]</a><span class="k">def</span> <span class="nf">DisableLED_AutoMode</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Disable automode of all LEDs.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xC8</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0xC8</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xC8</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0xC8</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xC8</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0xC8</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xC8</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0xC8</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnableLED_AutoMode"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.EnableLED_AutoMode">[docs]</a><span class="k">def</span> <span class="nf">EnableLED_AutoMode</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enable automode of all LEDs.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xC8</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0xC8</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xC8</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0xC8</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xC8</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0xC8</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xC8</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0xC8</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PowerPlugDetect"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.PowerPlugDetect">[docs]</a><span class="k">def</span> <span class="nf">PowerPlugDetect</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print power plug detect information.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xCC</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x81</span><span class="p">,</span> <span class="mh">0xCC</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GetDevideInfo"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.GetDevideInfo">[docs]</a><span class="k">def</span> <span class="nf">GetDevideInfo</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print device information.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xD1</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0xD1</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GetFirmwareIDs"><a class="viewcode-back" href="../../sciopy.html#sciopy.setup_m.GetFirmwareIDs">[docs]</a><span class="k">def</span> <span class="nf">GetFirmwareIDs</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print devide firmware.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    serial :</span>
+<span class="sd">        serial connection</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">([</span><span class="mh">0xD2</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0xD2</span><span class="p">]))</span>
+    <span class="n">SystemMessageCallback</span><span class="p">(</span><span class="n">serial</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Jacob Peter Thönes.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
