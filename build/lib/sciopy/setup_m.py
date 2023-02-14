@@ -467,6 +467,9 @@ def reduce_burst_to_available_parts(
     list
         burst counts that have to be configured
     """
+    for ele in leq_borders:
+        if ele == brst_cnt:
+            return [ele]
     for brdrs in leq_borders[::-1]:
         brst_cnt = reduce_burst_to_less_x(brst_cnt, brdrs)
     return brst_cnt

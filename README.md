@@ -17,7 +17,7 @@ All requirements are provided inside the `requirements.txt`. To install them nav
 
 ## Version
 
-    0.3.0
+    0.3.1
 
 ## Contact
 
