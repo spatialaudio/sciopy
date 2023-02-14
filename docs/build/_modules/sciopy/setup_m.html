@@ -538,6 +538,9 @@
 <span class="sd">    list</span>
 <span class="sd">        burst counts that have to be configured</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">leq_borders</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ele</span> <span class="o">==</span> <span class="n">brst_cnt</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">ele</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">brdrs</span> <span class="ow">in</span> <span class="n">leq_borders</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
         <span class="n">brst_cnt</span> <span class="o">=</span> <span class="n">reduce_burst_to_less_x</span><span class="p">(</span><span class="n">brst_cnt</span><span class="p">,</span> <span class="n">brdrs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">brst_cnt</span></div>
