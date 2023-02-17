@@ -7,13 +7,17 @@ ScioPy Documentation!
 ==================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    usage/installation
 
 .. automodule:: sciopy
    :autosummary:
+   :autosummary-no-nesting:
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Indices and tables
 ==================
