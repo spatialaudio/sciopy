@@ -22,6 +22,7 @@ from .print_command_info import (
     print_command_list,
 )
 
+from .prepare_data import create_prep_directory, extract_potentials_from_sample_n_el_16
 
 from .setup_m import (
     SystemMessageCallback,
@@ -123,4 +124,7 @@ __all__ = [
     "configuration_04",
     "configuration_05",
     "configure_configuration",
+    # .prepare_data
+    create_prep_directory,
+    extract_potentials_from_sample_n_el_16,
 ]

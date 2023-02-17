@@ -120,3 +120,10 @@ class SingleEitFrame:
 # class BaseSettingForEstimation:
 #    active_channel_groups: np.ndarray
 #    burst_count: int
+
+
+@dataclass
+class PreperationConfig:
+    lpath: str
+    spath: str
+    n_samples: int
