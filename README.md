@@ -11,9 +11,7 @@ All requirements are provided inside the `requirements.txt`. To install them nav
 
 ## TBD:
 
-- Insert unknown parameter in `doteit.py`
-- Add the type of a serial connection `type(serial)`
-- Implement the function `configure_configuration()`
+- A lot
 
 ## Version
 
