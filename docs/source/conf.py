@@ -10,15 +10,10 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# Build api doc: sphinx-apidoc -f -o source/ ../sciopy/
-# Build sphinx docu inside the "docs" directory with: sphinx-build -b html  source/ build/
-
 import os
 import sys
 
 sys.path.insert(0, os.path.abspath("../.."))
-sys.path.insert(0, os.path.abspath(".."))
-sys.path.insert(0, os.path.abspath("."))
 
 
 # -- Project information -----------------------------------------------------
@@ -34,24 +29,22 @@ author = "Jacob Peter Thönes"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
-    "sphinx.ext.intersphinx",
-    "sphinx.ext.viewcode",
-    "sphinx.ext.napoleon",  # support for NumPy-style docstrings
+    "sphinx.ext.autodoc",  # automatically generate documentation for modules
+    "sphinx.ext.napoleon",  # to read Google-style or Numpy-style docstrings
+    "sphinx.ext.viewcode",  # to allow vieing the source code in the web page
+    "autodocsumm",  # to generate tables of functions, attributes, methods, etc.
 ]
 
-
-napoleon_google_docstring = False
 napoleon_numpy_docstring = True
-napoleon_include_private_with_doc = False
-napoleon_include_special_with_doc = False
-napoleon_use_admonition_for_examples = False
-napoleon_use_admonition_for_notes = False
-napoleon_use_admonition_for_references = False
-napoleon_use_ivar = False
-napoleon_use_param = False
-napoleon_use_rtype = False
+# don't include docstrings from the parent class
+autodoc_inherit_docstrings = False
+# Show types only in descriptions, not in signatures
+autodoc_typehints = "description"
+
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/", None),
+    "numpy": ("http://docs.scipy.org/doc/numpy/", None),
+}
 
 
 # Add any paths that contain templates here, relative to this directory.
