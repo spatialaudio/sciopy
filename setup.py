@@ -6,7 +6,7 @@ setuptools.setup(
     author="Jacob Peter Thönes",
     author_email="jacob.thoenes@uni-rostock.de",
     description="Python based interface module for serial communication with the ScioSpec Electrical Impedance Tomography (EIT) device.",
-    long_description=open("README.md").read(),
+    long_description=open("README.rst").read(),
     long_description_content_type="text/markdown",
     keywords="ScioSpec EIT".split(),
     platforms="any",
