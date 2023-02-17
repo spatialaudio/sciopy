@@ -1,4 +1,9 @@
 conda:
-    file: docs/readthedocs-environment.yml
+    environment: docs/readthedocs-environment.yml
+
+sphinx:
+    configuration: docs/source/conf.py
+
 python:
-    setup_py_install: true
+    install:
+    -   requirements: docs/requirements.txt
