@@ -1,3 +1,4 @@
 numpy==1.22.3
 pyserial==3.5
 setuptools==61.2.0
+tqdm==4.60.0
