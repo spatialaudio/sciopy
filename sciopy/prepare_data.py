@@ -1,7 +1,9 @@
 import os
-from .sciopy_dataclasses import PreperationConfig
-
+import math
+from tqdm import tqdm
 import numpy as np
+
+from .sciopy_dataclasses import PreperationConfig
 
 
 def create_prep_directory(prep_cnf: PreperationConfig) -> str:
@@ -53,3 +55,96 @@ def extract_potentials_from_sample_n_el_16(sample: np.lib.npyio.NpzFile) -> np.n
         for el in range(n_el):
             pot_matrix[stage, el] = sample["data"][stage].__dict__[f"ch_{el+1}"]
     return pot_matrix
+
+
+def comp_tank_relative_r_phi(
+    sample: np.lib.npyio.NpzFile,
+    ender_x_y_center: float = 180.0,
+) -> tuple:
+    """
+    comp_tank_relative_r_phi converts the absolute Ender5 cartesian position to tank relative polar position.
+
+    Parameters
+    ----------
+    sample : np.lib.npyio.NpzFile
+        single sample
+    ender_x_y_center : float, optional
+        center position of Ender5 x,y-axis, by default 180.0
+
+    Returns
+    -------
+    tuple
+        tank relative object position
+    """
+    x_abs = sample["enderstat"].tolist()["abs_x_pos"] - ender_x_y_center
+    y_abs = sample["enderstat"].tolist()["abs_y_pos"] - ender_x_y_center
+
+    r = np.round(np.sqrt(x_abs**2 + y_abs**2), 2)
+    phi = np.round(math.degrees(np.arctan2(x_abs, y_abs)), 2)
+
+    return (r, phi)
+
+
+def check_n_el_condition(
+    prep_cnf: PreperationConfig, ch_group_to_check: list, n_el_to_check: int
+) -> bool:
+    """
+    check_n_el_condition proofs, if a single random data point is in the right shape.
+
+    Parameters
+    ----------
+    prep_cnf : PreperationConfig
+        config for conversion
+    ch_group_to_check : list
+        predetermined channel group
+    n_el_to_check : int
+        predetermined number of electrodes
+
+    Returns
+    -------
+    bool
+        true if condition is fulfiled, false else
+    """
+
+    rand_sample = np.load(
+        prep_cnf.lpath
+        + "sample_{0:06d}.npz".format(np.random.randint(0, prep_cnf.n_samples)),
+        allow_pickle=True,
+    )
+    set_ch_group = rand_sample["config"].tolist().channel_group
+    set_n_el = rand_sample["config"].tolist().n_el
+    if set_ch_group == ch_group_to_check and set_n_el == n_el_to_check:
+        return True
+    else:
+        print("\tError: Data has not the right number of channels and/or electrodes!")
+        return False
+
+
+def prepare_all_samples_for_16_el(prep_cnf: PreperationConfig) -> None:
+    """
+    Converts all samples inside one directory that were recorded in 16
+    electrode mode and save the potential and positional data to a target directory.
+
+    Parameters
+    ----------
+    prep_cnf : PreperationConfig
+        _description_
+    """
+
+    check_result = check_n_el_condition(
+        prep_cnf, ch_group_to_check=[1], n_el_to_check=16
+    )
+
+    if check_result:
+        for sample_path in tqdm(np.sort(os.listdir(prep_cnf.lpath))):
+            tmp_sample = np.load(prep_cnf.lpath + sample_path, allow_pickle=True)
+            tmp_p_mat = extract_potentials_from_sample_n_el_16(tmp_sample)
+
+            np.savez(
+                prep_cnf.spath + sample_path,
+                potential_matrix=tmp_p_mat,
+                r_phi=comp_tank_relative_r_phi(tmp_sample),
+                config=tmp_sample["config"].tolist().__dict__,
+            )
+    else:
+        print("Could not start converting.")

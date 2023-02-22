@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List
 
 
-@dataclass(slots=True)
+@dataclass
 class SingleFrame:
     """
     This class is for parsing single excitation stages.
@@ -79,7 +79,7 @@ class SingleFrame:
     end_tag: str
 
 
-@dataclass(slots=True)
+@dataclass
 class ScioSpecMeasurementConfig:
     """
     Measurement config of the current measurement.
@@ -122,7 +122,7 @@ class SingleEitFrame:
 #    burst_count: int
 
 
-@dataclass(slots=True)
+@dataclass
 class PreperationConfig:
     lpath: str
     spath: str
