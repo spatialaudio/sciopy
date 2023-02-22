@@ -2,6 +2,7 @@ import os
 import math
 from tqdm import tqdm
 import numpy as np
+from sklearn import preprocessing
 
 from .sciopy_dataclasses import PreperationConfig
 
@@ -120,6 +121,67 @@ def check_n_el_condition(
         return False
 
 
+def extract_electrode_signal_without_excitation_stgs(
+    potential_matrix: np.ndarray, sample: np.lib.npyio.NpzFile, del_ex_stgs: bool = True
+) -> np.array:
+    """
+    extract_electrode_signal_without_excitation_stgs
+
+    Parameters
+    ----------
+    potential_matrix : np.ndarray
+        potential matrix
+    sample : np.lib.npyio.NpzFile
+        sample description
+    del_ex_stgs : bool, optional
+        delete the excitations or not, by default True
+
+    Returns
+    -------
+    np.array
+        _description_
+    """
+    p_mat_shape = potential_matrix.shape
+
+    if del_ex_stgs is False:
+        return np.reshape(potential_matrix, (p_mat_shape[0] * p_mat_shape[1],))
+    if del_ex_stgs is True:
+        resh_pot = np.reshape(potential_matrix, (p_mat_shape[0] * p_mat_shape[1],))
+        del_idx = []
+        for r, dat in enumerate(sample["data"]):
+            del_idx.append((dat.excitation_stgs - 1) + p_mat_shape[1] * r)
+        del_idx = np.concatenate(del_idx)
+        return np.delete(resh_pot, del_idx)
+
+
+def norm_data(data: np.ndarray, low_bound: int = 0, high_bound: int = 1) -> np.ndarray:
+    """
+    Normalise data to a given boundary. If the data is complex the absolute value ist computed.
+
+    Parameters
+    ----------
+    data : np.ndarray
+        data
+    low_bound : int, optional
+        lower boundary, by default 0
+    high_bound : int, optional
+        above boundary, by default 1
+
+    Returns
+    -------
+    np.ndarray
+        absolute and normalized data
+    """
+
+    norm_data = []
+    diff = high_bound - low_bound
+    diff_arr = max(data) - min(data)
+    for i in data:
+        temp = (((i - min(data)) * diff) / diff_arr) + low_bound
+        norm_data.append(temp)
+    return np.array(norm_data)
+
+
 def prepare_all_samples_for_16_el(prep_cnf: PreperationConfig) -> None:
     """
     Converts all samples inside one directory that were recorded in 16
@@ -139,10 +201,17 @@ def prepare_all_samples_for_16_el(prep_cnf: PreperationConfig) -> None:
         for sample_path in tqdm(np.sort(os.listdir(prep_cnf.lpath))):
             tmp_sample = np.load(prep_cnf.lpath + sample_path, allow_pickle=True)
             tmp_p_mat = extract_potentials_from_sample_n_el_16(tmp_sample)
-
+            v_without_ext = extract_electrode_signal_without_excitation_stgs(
+                tmp_p_mat, tmp_sample, True
+            )
             np.savez(
                 prep_cnf.spath + sample_path,
                 potential_matrix=tmp_p_mat,
+                v_with_ext=extract_electrode_signal_without_excitation_stgs(
+                    tmp_p_mat, tmp_sample, False
+                ),
+                v_without_ext=v_without_ext,
+                abs_v_norm_without_ext=norm_data(v_without_ext),
                 r_phi=comp_tank_relative_r_phi(tmp_sample),
                 config=tmp_sample["config"].tolist().__dict__,
             )
