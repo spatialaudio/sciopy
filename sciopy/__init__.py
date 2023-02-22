@@ -24,6 +24,8 @@ from .print_command_info import (
 
 from .prepare_data import create_prep_directory, prepare_all_samples_for_16_el
 
+from .visualization import plot_el_sign, plot_potential_matrix
+
 from .setup_m import (
     SystemMessageCallback,
     SaveSettings,
@@ -125,6 +127,9 @@ __all__ = [
     "configuration_05",
     "configure_configuration",
     # .prepare_data
-    create_prep_directory,
-    prepare_all_samples_for_16_el,
+    "create_prep_directory",
+    "prepare_all_samples_for_16_el",
+    # .visualization
+    "plot_potential_matrix",
+    "plot_el_sign",
 ]
