@@ -13,10 +13,6 @@ All requirements are provided inside the `requirements.txt`. To install them nav
 
 - A lot
 
-## Version
-
-    0.3.1
-
 ## Contact
 
 Email: jacob.thoenes@uni-rostock.de
