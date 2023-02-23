@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import math
+import os
+from .prepare_data import comp_tank_relative_r_phi
 from sciopy.prepare_data import norm_data
 
 
@@ -71,7 +73,7 @@ def plot_el_sign(sample: np.lib.npyio.NpzFile, norm: bool = False) -> None:
                 label=f"group {el+1}",
             )
             ax3.fill_betweenx(
-                (np.min(absol), np.max(absol)),
+                (0, np.max(absol)),
                 el * (n_el - 2),
                 (el + 1) * (n_el - 2),
                 facecolor=f"C{el%2}",
@@ -110,3 +112,60 @@ def plot_el_sign(sample: np.lib.npyio.NpzFile, norm: bool = False) -> None:
             )
     fig.tight_layout()
     plt.show()
+
+
+def plot_completeness(lpath: str) -> None:
+    """
+    plot_completeness shows the existing measurement points inside a directory
+
+    Parameters
+    ----------
+    lpath : str
+        target load directory
+    """
+    r = []
+    phi = []
+
+    r_empty = []
+    phi_empty = []
+
+    decide_mode_sample = np.load(lpath + os.listdir(lpath)[0], allow_pickle=True)
+    if decide_mode_sample.files[0] == "config":
+        for ele in np.sort(os.listdir(lpath))[
+            :: decide_mode_sample["config"].tolist().burst_count
+        ]:
+            tmp = np.load(lpath + ele, allow_pickle=True)
+            r_c, phi_c = comp_tank_relative_r_phi(tmp)
+            if len(tmp["data"]) == 0:
+                r_empty.append(r_c)
+                phi_empty.append(math.radians(phi_c))
+            else:
+                r.append(r_c)
+                phi.append(math.radians(phi_c))
+
+        fig = plt.figure(figsize=(8, 8))
+        ax = fig.add_subplot(projection="polar", polar=True)
+        c = ax.scatter(phi, r, c="green", s=20, alpha=1, label="existing points")
+        c = ax.scatter(
+            phi_empty, r_empty, c="red", s=20, alpha=1, label="missing points"
+        )
+        plt.title("Raw data")
+        ax.legend()
+        plt.tight_layout()
+        print(f"\tMissing points:{len(phi_empty)}")
+        
+
+    if decide_mode_sample.files[0] == "potential_matrix":
+        for ele in np.sort(os.listdir(lpath))[
+            :: decide_mode_sample["config"].tolist()["burst_count"]
+        ]:
+            tmp = np.load(lpath + ele, allow_pickle=True)
+            r.append(tmp["r_phi"][0])
+            phi.append(math.radians(tmp["r_phi"][1]))
+
+        fig = plt.figure(figsize=(8, 8))
+        ax = fig.add_subplot(projection="polar", polar=True)
+        c = ax.scatter(phi, r, c="green", s=20, alpha=1, label="existing points")
+        plt.title("ML preperated measurements.")
+        ax.legend()
+        plt.tight_layout()
