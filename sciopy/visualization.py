@@ -145,15 +145,12 @@ def plot_completeness(lpath: str) -> None:
 
         fig = plt.figure(figsize=(8, 8))
         ax = fig.add_subplot(projection="polar", polar=True)
-        c = ax.scatter(phi, r, c="green", s=20, alpha=1, label="existing points")
-        c = ax.scatter(
-            phi_empty, r_empty, c="red", s=20, alpha=1, label="missing points"
-        )
+        ax.scatter(phi, r, c="green", s=20, alpha=1, label="existing points")
+        ax.scatter(phi_empty, r_empty, c="red", s=20, alpha=1, label="missing points")
         plt.title("Raw data")
         ax.legend()
         plt.tight_layout()
         print(f"\tMissing points:{len(phi_empty)}")
-        
 
     if decide_mode_sample.files[0] == "potential_matrix":
         for ele in np.sort(os.listdir(lpath))[
@@ -165,7 +162,7 @@ def plot_completeness(lpath: str) -> None:
 
         fig = plt.figure(figsize=(8, 8))
         ax = fig.add_subplot(projection="polar", polar=True)
-        c = ax.scatter(phi, r, c="green", s=20, alpha=1, label="existing points")
+        ax.scatter(phi, r, c="green", s=20, alpha=1, label="existing points")
         plt.title("ML preperated measurements.")
         ax.legend()
         plt.tight_layout()

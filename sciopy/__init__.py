@@ -24,7 +24,7 @@ from .print_command_info import (
 
 from .prepare_data import create_prep_directory, prepare_all_samples_for_16_el
 
-from .visualization import plot_el_sign, plot_potential_matrix
+from .visualization import plot_el_sign, plot_potential_matrix, plot_completeness
 
 from .setup_m import (
     SystemMessageCallback,
@@ -132,4 +132,5 @@ __all__ = [
     # .visualization
     "plot_potential_matrix",
     "plot_el_sign",
+    "plot_completeness",
 ]
