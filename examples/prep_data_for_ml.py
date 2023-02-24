@@ -4,9 +4,9 @@ from sciopy.sciopy_dataclasses import PreperationConfig
 choice = input("Type 1 for programmed path, 2 for own path:")
 
 if int(choice) == 1:
-    lpath = "../../ScioSpecMeasurements/measurement_01/"
+    lpath = "../../ScioSpecMeasurements/measurement_2/"
 else:
-    lpath = input("Type in the source directory")
+    lpath = input("Type in the source directory path:")
 
 # Initialise the configuration class object
 prep_cnf = PreperationConfig(lpath, "", 0)
