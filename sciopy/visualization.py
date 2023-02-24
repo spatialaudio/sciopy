@@ -146,7 +146,10 @@ def plot_completeness(lpath: str) -> None:
         fig = plt.figure(figsize=(8, 8))
         ax = fig.add_subplot(projection="polar", polar=True)
         ax.scatter(phi, r, c="green", s=20, alpha=1, label="existing points")
-        ax.scatter(phi_empty, r_empty, c="red", s=20, alpha=1, label="missing points")
+        if len(r_empty) != 0:
+            ax.scatter(
+                phi_empty, r_empty, c="red", s=20, alpha=1, label="missing points"
+            )
         plt.title("Raw data")
         ax.legend()
         plt.tight_layout()
