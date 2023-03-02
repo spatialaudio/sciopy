@@ -59,6 +59,10 @@ from .setup_m import (
 )
 
 from .configurations import (
+    conf_n_el_16_adjacent,
+    conf_n_el_32_adjacent,
+    conf_n_el_16_opposite,
+    conf_n_el_32_opposite,
     configuration_01,
     configuration_02,
     configuration_03,
@@ -120,6 +124,10 @@ __all__ = [
     "GetDevideInfo",
     "GetFirmwareIDs",
     # .configurations
+    "conf_n_el_16_adjacent",
+    "conf_n_el_32_adjacent",
+    "conf_n_el_16_opposite",
+    "conf_n_el_32_opposite",
     "configuration_01",
     "configuration_02",
     "configuration_03",
