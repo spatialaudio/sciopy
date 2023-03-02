@@ -100,7 +100,9 @@ class ScioSpecMeasurementConfig:
         savepath for the samples
     object : str
         selected measurement geometry
-    """
+    size : float
+        size of the object in percent relating the unit circle tank
+    """ 
 
     com_port: str
     burst_count: int
@@ -109,6 +111,7 @@ class ScioSpecMeasurementConfig:
     actual_sample: int
     s_path: str
     object: str
+    size:float
 
 
 @dataclass
