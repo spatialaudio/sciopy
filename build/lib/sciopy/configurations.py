@@ -82,6 +82,7 @@ def conf_n_el_16_adjacent(
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
+        size=cnf.size,
     )
 
 
@@ -164,6 +165,7 @@ def conf_n_el_16_opposite(
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
+        size=cnf.size,
     )
 
 
@@ -262,6 +264,7 @@ def conf_n_el_32_adjacent(
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
+        size=cnf.size,
     )
 
 
@@ -360,6 +363,7 @@ def conf_n_el_32_opposite(
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
+        size=cnf.size,
     )
 
 
@@ -458,6 +462,7 @@ def configuration_01(
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
+        size=cnf.size,
     )
 
 
@@ -546,6 +551,7 @@ def configuration_02(
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
+        size=cnf.size,
     )
 
 
@@ -635,6 +641,7 @@ def configuration_03(
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
+        size=cnf.size,
     )
 
 
@@ -740,6 +747,7 @@ def configuration_04(
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
+        size=cnf.size,
     )
 
 
@@ -877,6 +885,7 @@ def configuration_05(
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
+        size=cnf.size,
     )
 
 
@@ -892,4 +901,5 @@ def configure_configuration(serial, cnf: ScioSpecMeasurementConfig) -> None:
         actual_sample=cnf.actual_sample,
         s_path=cnf.s_path,
         object=cnf.object,
+        size=cnf.size,
     )
