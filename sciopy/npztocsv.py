@@ -13,8 +13,6 @@ s_dict_n_el_16 = {
     "object": [],
     "size": [],
     "material": [],
-    "saline_conductivity": [],
-    "temperature": [],
     "water_lvl": [],
     "r": [],
     "phi": [],
@@ -48,8 +46,6 @@ s_dict_n_el_32 = {
     "object": [],
     "size": [],
     "material": [],
-    "saline_conductivity": [],
-    "temperature": [],
     "water_lvl": [],
     "r": [],
     "phi": [],
@@ -214,7 +210,7 @@ def convert_measurement_directory_n_el_16(
 
     if len(s_dict_n_el_16["n_sample"]) != 0:
         # clear directory
-        print(f"clearing: s_dict_n_el_16")
+        print("clearing: s_dict_n_el_16")
         s_dict_n_el_16 = clear_s_dict(s_dict_n_el_16)
 
     for ele in tqdm(os.listdir(lpath)):
