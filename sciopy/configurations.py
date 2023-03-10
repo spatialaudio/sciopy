@@ -83,6 +83,10 @@ def conf_n_el_16_adjacent(
         s_path=cnf.s_path,
         object=cnf.object,
         size=cnf.size,
+        material=cnf.material,
+        saline_conductivity=cnf.saline_conductivity,
+        temperature=cnf.temperature,
+        water_lvl=cnf.water_lvl,
     )
 
 
@@ -166,6 +170,10 @@ def conf_n_el_16_opposite(
         s_path=cnf.s_path,
         object=cnf.object,
         size=cnf.size,
+        material=cnf.material,
+        saline_conductivity=cnf.saline_conductivity,
+        temperature=cnf.temperature,
+        water_lvl=cnf.water_lvl,
     )
 
 
@@ -265,6 +273,10 @@ def conf_n_el_32_adjacent(
         s_path=cnf.s_path,
         object=cnf.object,
         size=cnf.size,
+        material=cnf.material,
+        saline_conductivity=cnf.saline_conductivity,
+        temperature=cnf.temperature,
+        water_lvl=cnf.water_lvl,
     )
 
 
@@ -364,6 +376,10 @@ def conf_n_el_32_opposite(
         s_path=cnf.s_path,
         object=cnf.object,
         size=cnf.size,
+        material=cnf.material,
+        saline_conductivity=cnf.saline_conductivity,
+        temperature=cnf.temperature,
+        water_lvl=cnf.water_lvl,
     )
 
 
@@ -463,6 +479,10 @@ def configuration_01(
         s_path=cnf.s_path,
         object=cnf.object,
         size=cnf.size,
+        material=cnf.material,
+        saline_conductivity=cnf.saline_conductivity,
+        temperature=cnf.temperature,
+        water_lvl=cnf.water_lvl,
     )
 
 
@@ -552,6 +572,10 @@ def configuration_02(
         s_path=cnf.s_path,
         object=cnf.object,
         size=cnf.size,
+        material=cnf.material,
+        saline_conductivity=cnf.saline_conductivity,
+        temperature=cnf.temperature,
+        water_lvl=cnf.water_lvl,
     )
 
 
@@ -642,6 +666,10 @@ def configuration_03(
         s_path=cnf.s_path,
         object=cnf.object,
         size=cnf.size,
+        material=cnf.material,
+        saline_conductivity=cnf.saline_conductivity,
+        temperature=cnf.temperature,
+        water_lvl=cnf.water_lvl,
     )
 
 
@@ -748,6 +776,10 @@ def configuration_04(
         s_path=cnf.s_path,
         object=cnf.object,
         size=cnf.size,
+        material=cnf.material,
+        saline_conductivity=cnf.saline_conductivity,
+        temperature=cnf.temperature,
+        water_lvl=cnf.water_lvl,
     )
 
 
@@ -886,6 +918,10 @@ def configuration_05(
         s_path=cnf.s_path,
         object=cnf.object,
         size=cnf.size,
+        material=cnf.material,
+        saline_conductivity=cnf.saline_conductivity,
+        temperature=cnf.temperature,
+        water_lvl=cnf.water_lvl,
     )
 
 
@@ -902,4 +938,8 @@ def configure_configuration(serial, cnf: ScioSpecMeasurementConfig) -> None:
         s_path=cnf.s_path,
         object=cnf.object,
         size=cnf.size,
+        material=cnf.material,
+        saline_conductivity=cnf.saline_conductivity,
+        temperature=cnf.temperature,
+        water_lvl=cnf.water_lvl,
     )
