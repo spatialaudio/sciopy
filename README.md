@@ -1,7 +1,5 @@
 # ![sciopy](doc/images/logo_sciopy.png)
 
-# ScioPY
-
 This package offers the serial interface for communication with an EIT device from ScioSpec. Commands can be written serially and the system response can be read out. With the current version, it is possible to start and stop measurements with defined burst counts and to read out the measurement data. In addition, the measurement data is packed into a data class for better further processing.
 
 ## Install Requirements
