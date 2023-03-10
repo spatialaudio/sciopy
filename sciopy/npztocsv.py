@@ -13,9 +13,9 @@ s_dict_n_el_16 = {
     "object": [],
     "size": [],
     "material": [],
-    "saline_conductivity":[],
-    "temperature":[],
-    "water_lvl":[],
+    "saline_conductivity": [],
+    "temperature": [],
+    "water_lvl": [],
     "r": [],
     "phi": [],
     "saline_conductivity": [],
@@ -48,9 +48,9 @@ s_dict_n_el_32 = {
     "object": [],
     "size": [],
     "material": [],
-    "saline_conductivity":[],
-    "temperature":[],
-    "water_lvl":[],
+    "saline_conductivity": [],
+    "temperature": [],
+    "water_lvl": [],
     "r": [],
     "phi": [],
     "saline_conductivity": [],
@@ -129,7 +129,7 @@ def single_measurement_to_csv_n_el_16(
     r_split : float, optional
         only write a given radial value to the s_dict_n_el_16, by default -1.0,
         if default, the radial position is not inspected.
-        
+
     Returns
     -------
     dict

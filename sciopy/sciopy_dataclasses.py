@@ -121,9 +121,10 @@ class ScioSpecMeasurementConfig:
     object: str
     size: float
     material: str
-    saline_conductivity :float
-    temperature:float
-    water_lvl:float
+    saline_conductivity: float
+    temperature: float
+    water_lvl: float
+
 
 @dataclass
 class SingleEitFrame:
