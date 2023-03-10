@@ -59,6 +59,10 @@ from .setup_m import (
 )
 
 from .configurations import (
+    conf_n_el_16_adjacent,
+    conf_n_el_32_adjacent,
+    conf_n_el_16_opposite,
+    conf_n_el_32_opposite,
     configuration_01,
     configuration_02,
     configuration_03,
@@ -67,6 +71,12 @@ from .configurations import (
     configure_configuration,
 )
 
+from .npztocsv import (
+    clear_s_dict,
+    single_measurement_to_csv_n_el_16,
+    convert_measurement_directory_n_el_16,
+    convert_measurement_directory_n_el_16_r_split,
+)
 
 # TBD from .configurations import configuration_01
 
@@ -120,6 +130,10 @@ __all__ = [
     "GetDevideInfo",
     "GetFirmwareIDs",
     # .configurations
+    "conf_n_el_16_adjacent",
+    "conf_n_el_32_adjacent",
+    "conf_n_el_16_opposite",
+    "conf_n_el_32_opposite",
     "configuration_01",
     "configuration_02",
     "configuration_03",
@@ -133,4 +147,9 @@ __all__ = [
     "plot_potential_matrix",
     "plot_el_sign",
     "plot_completeness",
+    # .npztocsv
+    "clear_s_dict",
+    "single_measurement_to_csv_n_el_16",
+    "convert_measurement_directory_n_el_16",
+    "convert_measurement_directory_n_el_16_r_split",
 ]

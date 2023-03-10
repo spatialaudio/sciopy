@@ -80,7 +80,7 @@ def comp_tank_relative_r_phi(
     y_abs = sample["enderstat"].tolist()["abs_y_pos"] - ender_x_y_center
 
     r = np.round(np.sqrt(x_abs**2 + y_abs**2), 2)
-    phi = np.round(math.degrees(np.arctan2(x_abs, y_abs)), 2)
+    phi = -np.round(math.degrees(np.arctan2(x_abs, y_abs))-90, 2)+90
 
     return (r, phi)
 
