@@ -5,3 +5,4 @@ dist/
 sciopy.egg-info/
 .ipynb
 developing.ipynb
+update_package.sh
