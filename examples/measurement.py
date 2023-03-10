@@ -21,6 +21,10 @@ scio_spec_measurement_config = ScioSpecMeasurementConfig(
     s_path="",
     object="circle",
     size=0.1,
+    material= 'PLA',
+    saline_conductivity = 0.0,
+    temperature=20.0,
+    water_lvl=20.0,
 )
 
 # Connect ScioSpec device
