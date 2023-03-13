@@ -102,6 +102,14 @@ class ScioSpecMeasurementConfig:
         selected measurement geometry
     size : float
         size of the object in percent relating the unit circle tank
+    material : str
+        material of the placed object
+    saline_conductivity : float
+        measured conductivity of the saline
+    temperature : float
+        temperature of the Ender 5 printing bed
+    water_lvl : float
+        water level inside the phantom tank
     """
 
     com_port: str
@@ -112,6 +120,10 @@ class ScioSpecMeasurementConfig:
     s_path: str
     object: str
     size: float
+    material: str
+    saline_conductivity: float
+    temperature: float
+    water_lvl: float
 
 
 @dataclass

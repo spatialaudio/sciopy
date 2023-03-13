@@ -80,6 +80,7 @@ def comp_tank_relative_r_phi(
     y_abs = sample["enderstat"].tolist()["abs_y_pos"] - ender_x_y_center
 
     r = np.round(np.sqrt(x_abs**2 + y_abs**2), 2)
+    # Pay attention to the phi position due to the phantom tank alignment.
     phi = -np.round(math.degrees(np.arctan2(x_abs, y_abs)) - 90, 2) + 90
 
     return (r, phi)
@@ -124,7 +125,7 @@ def extract_electrode_signal_without_excitation_stgs(
     potential_matrix: np.ndarray, sample: np.lib.npyio.NpzFile, del_ex_stgs: bool = True
 ) -> np.array:
     """
-    extract_electrode_signal_without_excitation_stgs
+    Extracts the electrode signal without the corresponding excitation stages.
 
     Parameters
     ----------
@@ -138,7 +139,7 @@ def extract_electrode_signal_without_excitation_stgs(
     Returns
     -------
     np.array
-        _description_
+        electrode signal
     """
     p_mat_shape = potential_matrix.shape
 
