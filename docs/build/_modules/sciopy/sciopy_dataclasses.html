@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sciopy.sciopy_dataclasses &#8212; sciopy  documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for sciopy.sciopy_dataclasses</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+
+<div class="viewcode-block" id="SingleFrame"><a class="viewcode-back" href="../../sciopy.html#sciopy.sciopy_dataclasses.SingleFrame">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">SingleFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is for parsing single excitation stages.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    start_tag : str</span>
+<span class="sd">        has to be &#39;b4&#39;</span>
+<span class="sd">    channel_group : int</span>
+<span class="sd">        channel group: CG=1 -&gt; Channels 1-16, CG=2 -&gt; Channels 17-32 up to CG=4</span>
+<span class="sd">    excitation_stgs : List[str]</span>
+<span class="sd">        excitation setting: [ESout, ESin]</span>
+<span class="sd">    frequency_row : List[str]</span>
+<span class="sd">        frequency row</span>
+<span class="sd">    timestamp : int</span>
+<span class="sd">        milli seconds</span>
+<span class="sd">    ch_1 : complex   </span>
+<span class="sd">        complex value of channel 1</span>
+<span class="sd">    ch_2 : complex   </span>
+<span class="sd">        complex value of channel 2</span>
+<span class="sd">    ch_3 : complex     </span>
+<span class="sd">        complex value of channel 3</span>
+<span class="sd">    ch_4 : complex   </span>
+<span class="sd">        complex value of channel 4</span>
+<span class="sd">    ch_5 : complex     </span>
+<span class="sd">        complex value of channel 5</span>
+<span class="sd">    ch_6 : complex     </span>
+<span class="sd">        complex value of channel 6</span>
+<span class="sd">    ch_7 : complex   </span>
+<span class="sd">        complex value of channel 7</span>
+<span class="sd">    ch_8 : complex     </span>
+<span class="sd">        complex value of channel 8</span>
+<span class="sd">    ch_9 : complex   </span>
+<span class="sd">        complex value of channel 9</span>
+<span class="sd">    ch_10 : complex   </span>
+<span class="sd">        complex value of channel 10</span>
+<span class="sd">    ch_11 : complex   </span>
+<span class="sd">        complex value of channel 11</span>
+<span class="sd">    ch_12 : complex   </span>
+<span class="sd">        complex value of channel 12</span>
+<span class="sd">    ch_13 : complex   </span>
+<span class="sd">        complex value of channel 13</span>
+<span class="sd">    ch_14 : complex   </span>
+<span class="sd">        complex value of channel 14</span>
+<span class="sd">    ch_15 : complex   </span>
+<span class="sd">        complex value of channel 15</span>
+<span class="sd">    ch_16 : complex   </span>
+<span class="sd">        complex value of channel 16</span>
+<span class="sd">    end_tag : str       </span>
+<span class="sd">        has to be &#39;b4&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">start_tag</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">channel_group</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">excitation_stgs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">frequency_row</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># [ms]</span>
+    <span class="n">ch_1</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_2</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_3</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_4</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_5</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_6</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_7</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_8</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_9</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_10</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_11</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_12</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_13</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_14</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_15</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">ch_16</span><span class="p">:</span> <span class="nb">complex</span>
+    <span class="n">end_tag</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="ScioSpecMeasurementConfig"><a class="viewcode-back" href="../../sciopy.html#sciopy.sciopy_dataclasses.ScioSpecMeasurementConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ScioSpecMeasurementConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement config of the current measurement.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    com_port : str  </span>
+<span class="sd">        ScioSpec device com port</span>
+<span class="sd">    burst_count : int  </span>
+<span class="sd">        total number of measurements between start and stop command</span>
+<span class="sd">    n_el : int  </span>
+<span class="sd">        total number of injecting electrodes</span>
+<span class="sd">    channel_group : list </span>
+<span class="sd">        list of channel groups participating in the measurement</span>
+<span class="sd">    actual_sample : int  </span>
+<span class="sd">        numbering of samples</span>
+<span class="sd">    s_path : str </span>
+<span class="sd">        savepath for the samples</span>
+<span class="sd">    object : str</span>
+<span class="sd">        selected measurement geometry</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">com_port</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">burst_count</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">n_el</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">channel_group</span><span class="p">:</span> <span class="nb">list</span>
+    <span class="n">actual_sample</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">s_path</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="nb">object</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="SingleEitFrame"><a class="viewcode-back" href="../../sciopy.html#sciopy.sciopy_dataclasses.SingleEitFrame">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">SingleEitFrame</span><span class="p">:</span>
+    <span class="k">pass</span></div>
+
+
+<span class="c1"># @dataclass</span>
+<span class="c1"># class BaseSettingForEstimation:</span>
+<span class="c1">#    active_channel_groups: np.ndarray</span>
+<span class="c1">#    burst_count: int</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">sciopy</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">sciopy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contact.html">Contact</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Jacob Peter Thönes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

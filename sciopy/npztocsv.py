@@ -18,6 +18,7 @@ s_dict_n_el_16 = {
     "phi": [],
     "saline_conductivity": [],
     "temperature": [],
+    "exc_freq":[],
     "inj_el_vcc": [],
     "inj_el_gnd": [],
     "el_1": [],
@@ -51,6 +52,7 @@ s_dict_n_el_32 = {
     "phi": [],
     "saline_conductivity": [],
     "temperature": [],
+    "exc_freq":[],
     "inj_el_vcc": [],
     "inj_el_gnd": [],
     "el_1": [],
@@ -153,6 +155,7 @@ def single_measurement_to_csv_n_el_16(
             s_dict_n_el_16["water_lvl"].append(config.water_lvl)
             s_dict_n_el_16["saline_conductivity"].append(config.saline_conductivity)
             s_dict_n_el_16["temperature"].append(config.temperature)
+            # Add exc_freq
             s_dict_n_el_16["inj_el_vcc"].append(frame.excitation_stgs[0])
             s_dict_n_el_16["inj_el_gnd"].append(frame.excitation_stgs[1])
             for el in range(config.n_el):
@@ -170,11 +173,12 @@ def single_measurement_to_csv_n_el_16(
             s_dict_n_el_16["channel_group"].append(config.channel_group)
             s_dict_n_el_16["object"].append(config.object)
             s_dict_n_el_16["size"].append(config.size)
-            s_dict_n_el_16["material"].append(material)
+            s_dict_n_el_16["material"].append(config.material)
             s_dict_n_el_16["r"].append(r)
             s_dict_n_el_16["phi"].append(phi)
-            s_dict_n_el_16["saline_conductivity"].append(saline_conductivity)
-            s_dict_n_el_16["temperature"].append(temperature)
+            s_dict_n_el_16["saline_conductivity"].append(config.saline_conductivity)
+            s_dict_n_el_16["temperature"].append(config.temperature)
+            # Add exc_freq
             s_dict_n_el_16["inj_el_vcc"].append(frame.excitation_stgs[0])
             s_dict_n_el_16["inj_el_gnd"].append(frame.excitation_stgs[1])
             for el in range(config.n_el):
@@ -270,6 +274,7 @@ def convert_measurement_directory_n_el_16_r_split(
     """
     convert_measurement_directory_n_el_16_r_split does the full conversion of a
     data set and writes CSV data depending on the measured radiants.
+    The reason for the splis is the resulting size of the .CSV files.
 
     Parameters
     ----------
