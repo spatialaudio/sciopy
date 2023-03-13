@@ -34,7 +34,7 @@ Email: jacob.thoenes@uni-rostock.de
 
 ```bibtex
 @Unpublished{Thoenes2023,
-  author = {Jacob Perter Thönes},
+  author = {Jacob Peter Thönes},
   title  = {Python based interface module for serial communication with the ScioSpec Electrical Impedance Tomography (EIT) device.},
   year   = {2023},
 }
