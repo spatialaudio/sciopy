@@ -1,8 +1,9 @@
 __pycache__/
-.build/
+build/
 dist/
 .eggs/
 sciopy.egg-info/
 .ipynb
 developing.ipynb
 update_package.sh
+update_test_pypi.sh

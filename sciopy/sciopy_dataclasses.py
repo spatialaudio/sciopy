@@ -110,6 +110,8 @@ class ScioSpecMeasurementConfig:
         temperature of the Ender 5 printing bed
     water_lvl : float
         water level inside the phantom tank
+    exc_freq : float
+        excitation signal frequency
     """
 
     com_port: str
@@ -124,6 +126,7 @@ class ScioSpecMeasurementConfig:
     saline_conductivity: float
     temperature: float
     water_lvl: float
+    exc_freq: float
 
 
 @dataclass

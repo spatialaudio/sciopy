@@ -87,6 +87,7 @@ def conf_n_el_16_adjacent(
         saline_conductivity=cnf.saline_conductivity,
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
+        exc_freq=10000.0,
     )
 
 
@@ -174,6 +175,7 @@ def conf_n_el_16_opposite(
         saline_conductivity=cnf.saline_conductivity,
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
+        exc_freq=10000.0,
     )
 
 
@@ -277,6 +279,7 @@ def conf_n_el_32_adjacent(
         saline_conductivity=cnf.saline_conductivity,
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
+        exc_freq=10000.0,
     )
 
 
@@ -380,6 +383,7 @@ def conf_n_el_32_opposite(
         saline_conductivity=cnf.saline_conductivity,
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
+        exc_freq=10000.0,
     )
 
 
@@ -483,6 +487,7 @@ def configuration_01(
         saline_conductivity=cnf.saline_conductivity,
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
+        exc_freq=cnf.exc_freq,
     )
 
 
@@ -576,6 +581,7 @@ def configuration_02(
         saline_conductivity=cnf.saline_conductivity,
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
+        exc_freq=1000.0,
     )
 
 
@@ -670,6 +676,7 @@ def configuration_03(
         saline_conductivity=cnf.saline_conductivity,
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
+        exc_freq=10000.0,
     )
 
 
@@ -780,6 +787,7 @@ def configuration_04(
         saline_conductivity=cnf.saline_conductivity,
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
+        exc_freq=15000.0,
     )
 
 
@@ -922,6 +930,7 @@ def configuration_05(
         saline_conductivity=cnf.saline_conductivity,
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
+        exc_freq=10000.0,
     )
 
 
@@ -942,4 +951,5 @@ def configure_configuration(serial, cnf: ScioSpecMeasurementConfig) -> None:
         saline_conductivity=cnf.saline_conductivity,
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
+        exc_freq=cnf.exc_freq,
     )
