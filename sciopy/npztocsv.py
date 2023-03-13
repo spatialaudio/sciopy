@@ -113,9 +113,6 @@ def single_measurement_to_csv_n_el_16(
     sample: np.lib.npyio.NpzFile,
     s_dict_n_el_16: dict,
     r_split: float = -1.0,
-    material: str = "PLA",
-    saline_conductivity: float = 99.9,
-    temperature: float = 22.1,
 ) -> dict:
     """
     Converts a single measurement sample to a dictonary for a later CSV expot.
@@ -164,7 +161,7 @@ def single_measurement_to_csv_n_el_16(
             s_dict_n_el_16["water_lvl"].append(config.water_lvl)
             s_dict_n_el_16["saline_conductivity"].append(config.saline_conductivity)
             s_dict_n_el_16["temperature"].append(config.temperature)
-            # Add exc_freq
+            s_dict_n_el_16["exc_freq"].append(config.exc_freq)
             s_dict_n_el_16["inj_el_vcc"].append(frame.excitation_stgs[0])
             s_dict_n_el_16["inj_el_gnd"].append(frame.excitation_stgs[1])
             for el in range(config.n_el):
@@ -187,7 +184,7 @@ def single_measurement_to_csv_n_el_16(
             s_dict_n_el_16["phi"].append(phi)
             s_dict_n_el_16["saline_conductivity"].append(config.saline_conductivity)
             s_dict_n_el_16["temperature"].append(config.temperature)
-            # Add exc_freq
+            s_dict_n_el_16["exc_freq"].append(config.exc_freq)
             s_dict_n_el_16["inj_el_vcc"].append(frame.excitation_stgs[0])
             s_dict_n_el_16["inj_el_gnd"].append(frame.excitation_stgs[1])
             for el in range(config.n_el):

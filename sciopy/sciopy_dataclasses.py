@@ -126,7 +126,7 @@ class ScioSpecMeasurementConfig:
     saline_conductivity: float
     temperature: float
     water_lvl: float
-    exc_freq:float
+    exc_freq: float
 
 
 @dataclass

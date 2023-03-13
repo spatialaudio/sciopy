@@ -25,6 +25,7 @@ scio_spec_measurement_config = ScioSpecMeasurementConfig(
     saline_conductivity=0.0,
     temperature=20.0,
     water_lvl=20.0,
+    exc_freq=10000.0,
 )
 
 # Connect ScioSpec device
