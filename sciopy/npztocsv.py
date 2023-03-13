@@ -113,6 +113,9 @@ def single_measurement_to_csv_n_el_16(
     sample: np.lib.npyio.NpzFile,
     s_dict_n_el_16: dict,
     r_split: float = -1.0,
+    material: str = "PLA",
+    saline_conductivity: float = 99.9,
+    temperature: float = 22.1,
 ) -> dict:
     """
     Converts a single measurement sample to a dictonary for a later CSV expot.
@@ -127,6 +130,12 @@ def single_measurement_to_csv_n_el_16(
     r_split : float, optional
         only write a given radial value to the s_dict_n_el_16, by default -1.0,
         if default, the radial position is not inspected.
+    material : str, optional
+        material of the measurement object, by default "PLA"
+    saline_conductivity : float, optional
+        saline conductivity, by default 99.9
+    temperature : float, optional
+        environment temperature, by default 22.1
 
     Returns
     -------
