@@ -6,3 +6,4 @@ sciopy.egg-info/
 .ipynb
 developing.ipynb
 update_package.sh
+update_test_pypi.sh
