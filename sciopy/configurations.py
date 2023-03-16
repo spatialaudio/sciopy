@@ -102,7 +102,7 @@ def conf_n_el_16_adjacent(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=10000.0,
-        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
+        datetime=datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
     )
 
 
@@ -204,7 +204,7 @@ def conf_n_el_16_opposite(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=10000.0,
-        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
+        datetime=datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
     )
 
 
@@ -322,7 +322,7 @@ def conf_n_el_32_adjacent(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=10000.0,
-        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
+        datetime=datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
     )
 
 
@@ -440,7 +440,7 @@ def conf_n_el_32_opposite(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=10000.0,
-        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
+        datetime=datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
     )
 
 
@@ -560,7 +560,7 @@ def configuration_01(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=cnf.exc_freq,
-        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
+        datetime=datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
     )
 
 
@@ -668,7 +668,7 @@ def configuration_02(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=1000.0,
-        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
+        datetime=datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
     )
 
 
@@ -777,7 +777,7 @@ def configuration_03(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=10000.0,
-        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
+        datetime=datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
     )
 
 
@@ -902,7 +902,7 @@ def configuration_04(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=15000.0,
-        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
+        datetime=datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
     )
 
 
@@ -1059,7 +1059,7 @@ def configuration_05(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=10000.0,
-        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
+        datetime=datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
     )
 
 
@@ -1081,5 +1081,5 @@ def configure_configuration(serial, cnf: ScioSpecMeasurementConfig) -> None:
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=cnf.exc_freq,
-        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
+        datetime=datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
     )

@@ -104,7 +104,7 @@ class ScioSpecMeasurementConfig:
         size of the object in percent relating the unit circle tank
     material : str
         material of the placed object
-    saline_conductivity : float
+    saline_conductivity : Tuple[float, str]
         measured conductivity of the saline
     temperature : float
         temperature of the Ender 5 printing bed
@@ -112,6 +112,8 @@ class ScioSpecMeasurementConfig:
         water level inside the phantom tank
     exc_freq : float
         excitation signal frequency
+    datetime : str
+        YYYY/MM/DD hh/mm/ss
     """
 
     com_port: str
