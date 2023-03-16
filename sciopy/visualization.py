@@ -129,7 +129,9 @@ def plot_completeness(lpath: str) -> None:
     r_empty = []
     phi_empty = []
 
-    decide_mode_sample = np.load(lpath + os.listdir(lpath)[0], allow_pickle=True)
+    decide_mode_sample = np.load(
+        lpath + os.listdir(lpath)[0], allow_pickle=True
+    )
     if decide_mode_sample.files[0] == "config":
         for ele in np.sort(os.listdir(lpath))[
             :: decide_mode_sample["config"].tolist().burst_count
@@ -148,7 +150,12 @@ def plot_completeness(lpath: str) -> None:
         ax.scatter(phi, r, c="green", s=20, alpha=1, label="existing points")
         if len(r_empty) != 0:
             ax.scatter(
-                phi_empty, r_empty, c="red", s=20, alpha=1, label="missing points"
+                phi_empty,
+                r_empty,
+                c="red",
+                s=20,
+                alpha=1,
+                label="missing points",
             )
         plt.title("Raw data")
         ax.legend()

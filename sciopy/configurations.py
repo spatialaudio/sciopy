@@ -1,5 +1,6 @@
 # TBD: https://stackoverflow.com/questions/3898572/what-are-the-most-common-python-docstring-formats
 from .sciopy_dataclasses import ScioSpecMeasurementConfig
+from datetime import datetime
 
 
 def conf_n_el_16_adjacent(
@@ -23,7 +24,20 @@ def conf_n_el_16_adjacent(
     serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x0A, 0xB0]))
     serial.write(
         bytearray(
-            [0xB0, 0x09, 0x05, 0x3F, 0x50, 0x62, 0x4D, 0xD2, 0xF1, 0xA9, 0xFC, 0xB0]
+            [
+                0xB0,
+                0x09,
+                0x05,
+                0x3F,
+                0x50,
+                0x62,
+                0x4D,
+                0xD2,
+                0xF1,
+                0xA9,
+                0xFC,
+                0xB0,
+            ]
         )
     )
     serial.write(bytearray([0xB0, 0x02, 0x0D, 0x02, 0xB0]))
@@ -75,7 +89,7 @@ def conf_n_el_16_adjacent(
     serial.write(bytearray([0xB4, 0x01, 0x01, 0xB4]))
     serial.write(bytearray([0xB4, 0x01, 0x00, 0xB4]))
     return ScioSpecMeasurementConfig(
-        serial.name,
+        com_port=serial.name,
         burst_count=10,
         n_el=16,
         channel_group=[1],
@@ -88,6 +102,7 @@ def conf_n_el_16_adjacent(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=10000.0,
+        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
     )
 
 
@@ -111,7 +126,20 @@ def conf_n_el_16_opposite(
     serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x0A, 0xB0]))
     serial.write(
         bytearray(
-            [0xB0, 0x09, 0x05, 0x3F, 0x50, 0x62, 0x4D, 0xD2, 0xF1, 0xA9, 0xFC, 0xB0]
+            [
+                0xB0,
+                0x09,
+                0x05,
+                0x3F,
+                0x50,
+                0x62,
+                0x4D,
+                0xD2,
+                0xF1,
+                0xA9,
+                0xFC,
+                0xB0,
+            ]
         )
     )
     serial.write(bytearray([0xB0, 0x02, 0x0D, 0x02, 0xB0]))
@@ -176,6 +204,7 @@ def conf_n_el_16_opposite(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=10000.0,
+        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
     )
 
 
@@ -199,7 +228,20 @@ def conf_n_el_32_adjacent(
     serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x0A, 0xB0]))
     serial.write(
         bytearray(
-            [0xB0, 0x09, 0x05, 0x3F, 0x50, 0x62, 0x4D, 0xD2, 0xF1, 0xA9, 0xFC, 0xB0]
+            [
+                0xB0,
+                0x09,
+                0x05,
+                0x3F,
+                0x50,
+                0x62,
+                0x4D,
+                0xD2,
+                0xF1,
+                0xA9,
+                0xFC,
+                0xB0,
+            ]
         )
     )
     serial.write(bytearray([0xB0, 0x02, 0x0D, 0x02, 0xB0]))
@@ -280,6 +322,7 @@ def conf_n_el_32_adjacent(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=10000.0,
+        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
     )
 
 
@@ -303,7 +346,20 @@ def conf_n_el_32_opposite(
     serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x0A, 0xB0]))
     serial.write(
         bytearray(
-            [0xB0, 0x09, 0x05, 0x3F, 0x50, 0x62, 0x4D, 0xD2, 0xF1, 0xA9, 0xFC, 0xB0]
+            [
+                0xB0,
+                0x09,
+                0x05,
+                0x3F,
+                0x50,
+                0x62,
+                0x4D,
+                0xD2,
+                0xF1,
+                0xA9,
+                0xFC,
+                0xB0,
+            ]
         )
     )
     serial.write(bytearray([0xB0, 0x02, 0x0D, 0x02, 0xB0]))
@@ -384,6 +440,7 @@ def conf_n_el_32_opposite(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=10000.0,
+        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
     )
 
 
@@ -405,10 +462,25 @@ def configuration_01(
     None
     """
     serial.write(bytearray([0xB0, 0x01, 0x01, 0xB0]))
-    serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x01, 0xB0]))  # Burst count
+    serial.write(
+        bytearray([0xB0, 0x03, 0x02, 0x00, 0x01, 0xB0])
+    )  # Burst count
     serial.write(
         bytearray(
-            [0xB0, 0x09, 0x05, 0x3F, 0x50, 0x62, 0x4D, 0xD2, 0xF1, 0xA9, 0xFC, 0xB0]
+            [
+                0xB0,
+                0x09,
+                0x05,
+                0x3F,
+                0x50,
+                0x62,
+                0x4D,
+                0xD2,
+                0xF1,
+                0xA9,
+                0xFC,
+                0xB0,
+            ]
         )
     )
     serial.write(bytearray([0xB0, 0x02, 0x0D, 0x01, 0xB0]))
@@ -488,6 +560,7 @@ def configuration_01(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=cnf.exc_freq,
+        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
     )
 
 
@@ -518,7 +591,20 @@ def configuration_02(
     serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x05, 0xB0]))
     serial.write(
         bytearray(
-            [0xB0, 0x09, 0x05, 0x3F, 0x50, 0x62, 0x4D, 0xD2, 0xF1, 0xA9, 0xFC, 0xB0]
+            [
+                0xB0,
+                0x09,
+                0x05,
+                0x3F,
+                0x50,
+                0x62,
+                0x4D,
+                0xD2,
+                0xF1,
+                0xA9,
+                0xFC,
+                0xB0,
+            ]
         )
     )
     serial.write(bytearray([0xB0, 0x02, 0x0D, 0x02, 0xB0]))
@@ -582,6 +668,7 @@ def configuration_02(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=1000.0,
+        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
     )
 
 
@@ -613,7 +700,20 @@ def configuration_03(
     serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x05, 0xB0]))
     serial.write(
         bytearray(
-            [0xB0, 0x09, 0x05, 0x3F, 0x50, 0x62, 0x4D, 0xD2, 0xF1, 0xA9, 0xFC, 0xB0]
+            [
+                0xB0,
+                0x09,
+                0x05,
+                0x3F,
+                0x50,
+                0x62,
+                0x4D,
+                0xD2,
+                0xF1,
+                0xA9,
+                0xFC,
+                0xB0,
+            ]
         )
     )
     serial.write(bytearray([0xB0, 0x02, 0x0D, 0x01, 0xB0]))
@@ -677,6 +777,7 @@ def configuration_03(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=10000.0,
+        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
     )
 
 
@@ -708,7 +809,20 @@ def configuration_04(
     serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x64, 0xB0]))
     serial.write(
         bytearray(
-            [0xB0, 0x09, 0x05, 0x3F, 0x50, 0x62, 0x4D, 0xD2, 0xF1, 0xA9, 0xFC, 0xB0]
+            [
+                0xB0,
+                0x09,
+                0x05,
+                0x3F,
+                0x50,
+                0x62,
+                0x4D,
+                0xD2,
+                0xF1,
+                0xA9,
+                0xFC,
+                0xB0,
+            ]
         )
     )
     serial.write(bytearray([0xB0, 0x02, 0x0D, 0x02, 0xB0]))
@@ -788,6 +902,7 @@ def configuration_04(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=15000.0,
+        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
     )
 
 
@@ -819,7 +934,20 @@ def configuration_05(
     serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x0A, 0xB0]))
     serial.write(
         bytearray(
-            [0xB0, 0x09, 0x05, 0x3F, 0x50, 0x62, 0x4D, 0xD2, 0xF1, 0xA9, 0xFC, 0xB0]
+            [
+                0xB0,
+                0x09,
+                0x05,
+                0x3F,
+                0x50,
+                0x62,
+                0x4D,
+                0xD2,
+                0xF1,
+                0xA9,
+                0xFC,
+                0xB0,
+            ]
         )
     )
     serial.write(bytearray([0xB0, 0x02, 0x0D, 0x03, 0xB0]))
@@ -931,6 +1059,7 @@ def configuration_05(
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=10000.0,
+        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
     )
 
 
@@ -952,4 +1081,5 @@ def configure_configuration(serial, cnf: ScioSpecMeasurementConfig) -> None:
         temperature=cnf.temperature,
         water_lvl=cnf.water_lvl,
         exc_freq=cnf.exc_freq,
+        datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
     )

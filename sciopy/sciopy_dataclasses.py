@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Tuple
 
 
 @dataclass
@@ -123,10 +123,11 @@ class ScioSpecMeasurementConfig:
     object: str
     size: float
     material: str
-    saline_conductivity: float
+    saline_conductivity: Tuple[float, str]
     temperature: float
     water_lvl: float
     exc_freq: float
+    datetime: str
 
 
 @dataclass
