@@ -130,9 +130,7 @@ def plot_completeness(lpath: str) -> None:
     r_empty = []
     phi_empty = []
 
-    decide_mode_sample = np.load(
-        lpath + os.listdir(lpath)[0], allow_pickle=True
-    )
+    decide_mode_sample = np.load(lpath + os.listdir(lpath)[0], allow_pickle=True)
     if decide_mode_sample.files[0] == "config":
         for ele in np.sort(os.listdir(lpath))[
             :: decide_mode_sample["config"].tolist().burst_count
