@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 import os
+from typing import Tuple
 from .prepare_data import comp_tank_relative_r_phi
 from sciopy.prepare_data import norm_data
 
@@ -176,3 +177,45 @@ def plot_completeness(lpath: str) -> None:
         plt.title("ML preperated measurements.")
         ax.legend()
         plt.tight_layout()
+
+
+def plot_temperatur_curve(
+    lpath: str, ret_data: bool = False
+) -> Tuple[np.ndarray, float, float]:
+    """TBD"""
+    temperature = []
+    date = []
+    decide_skip = np.load(lpath + os.listdir(lpath)[0], allow_pickle=True)
+
+    if decide_skip.files[0] == "config":
+        for ele in np.sort(os.listdir(lpath))[
+            :: decide_skip["config"].tolist().burst_count
+        ]:
+            tmp = np.load(lpath + ele, allow_pickle=True)
+            temperature.append(tmp["config"].tolist().temperature)
+            # date.append(tmp['config'].tolist().datetime.split(" ")[0])
+    else:
+        print("Please insert the lpath of the original measurement directory.")
+
+    date = np.array(date)
+    # enable with new data
+    dt_string = str(np.unique(date))
+
+    temperature = np.array(temperature)
+    mean_t = np.mean(temperature)
+    std_dev = np.std(temperature)
+    max_min_diff = np.max(temperature) - np.min(temperature)
+
+    plt.figure(figsize=(8, 4))
+    # enable with new data
+    # plt.title(f"{lpath.split("/")[-2:-1]}, {dt_string} ")
+    plt.plot(temperature)
+    plt.ylabel("$°C$")
+    plt.xlabel("sample n")
+    plt.show()
+    if ret_data:
+        return temperature, mean_t, std_dev, max_min_diff
+    else:
+        print(f"mean temperature:\t {mean_t}")
+        print(f"standart deviation:\t {std_dev}")
+        print(f"max(t)-min(t):\t {max_min_diff}")

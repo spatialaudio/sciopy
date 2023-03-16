@@ -55,9 +55,7 @@ def extract_potentials_from_sample_n_el_16(
 
     for stage in range(sample_data_shape_0):
         for el in range(n_el):
-            pot_matrix[stage, el] = sample["data"][stage].__dict__[
-                f"ch_{el+1}"
-            ]
+            pot_matrix[stage, el] = sample["data"][stage].__dict__[f"ch_{el+1}"]
     return pot_matrix
 
 
@@ -113,9 +111,7 @@ def check_n_el_condition(
 
     rand_sample = np.load(
         prep_cnf.lpath
-        + "sample_{0:06d}.npz".format(
-            np.random.randint(0, prep_cnf.n_samples)
-        ),
+        + "sample_{0:06d}.npz".format(np.random.randint(0, prep_cnf.n_samples)),
         allow_pickle=True,
     )
     set_ch_group = rand_sample["config"].tolist().channel_group
@@ -123,9 +119,7 @@ def check_n_el_condition(
     if set_ch_group == ch_group_to_check and set_n_el == n_el_to_check:
         return True
     else:
-        print(
-            "\tError: Data has not the right number of channels and/or electrodes!"
-        )
+        print("\tError: Data has not the right number of channels and/or electrodes!")
         return False
 
 
@@ -156,9 +150,7 @@ def extract_electrode_signal_without_excitation_stgs(
     if del_ex_stgs is False:
         return np.reshape(potential_matrix, (p_mat_shape[0] * p_mat_shape[1],))
     if del_ex_stgs is True:
-        resh_pot = np.reshape(
-            potential_matrix, (p_mat_shape[0] * p_mat_shape[1],)
-        )
+        resh_pot = np.reshape(potential_matrix, (p_mat_shape[0] * p_mat_shape[1],))
         del_idx = []
         for r, dat in enumerate(sample["data"]):
             del_idx.append((dat.excitation_stgs - 1) + p_mat_shape[1] * r)
@@ -166,9 +158,7 @@ def extract_electrode_signal_without_excitation_stgs(
         return np.delete(resh_pot, del_idx)
 
 
-def norm_data(
-    data: np.ndarray, low_bound: int = 0, high_bound: int = 1
-) -> np.ndarray:
+def norm_data(data: np.ndarray, low_bound: int = 0, high_bound: int = 1) -> np.ndarray:
     """
     Normalise data to a given boundary. If the data is complex the absolute value ist computed.
 
@@ -213,9 +203,7 @@ def prepare_all_samples_for_16_el(prep_cnf: PreperationConfig) -> None:
 
     if check_result:
         for sample_path in tqdm(np.sort(os.listdir(prep_cnf.lpath))):
-            tmp_sample = np.load(
-                prep_cnf.lpath + sample_path, allow_pickle=True
-            )
+            tmp_sample = np.load(prep_cnf.lpath + sample_path, allow_pickle=True)
             tmp_p_mat = extract_potentials_from_sample_n_el_16(tmp_sample)
             v_without_ext = extract_electrode_signal_without_excitation_stgs(
                 tmp_p_mat, tmp_sample, True

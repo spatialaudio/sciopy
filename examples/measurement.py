@@ -27,7 +27,7 @@ scio_spec_measurement_config = ScioSpecMeasurementConfig(
     temperature=20.0,
     water_lvl=20.0,
     exc_freq=10000.0,
-    datetime=datetime.now().strftime("%Y/%m/%d/ %H:%M:%S"),
+    datetime=datetime.now().strftime("%Y/%m/%d %H:%M:%S"),
 )
 
 # Connect ScioSpec device
