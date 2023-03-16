@@ -113,7 +113,7 @@ class ScioSpecMeasurementConfig:
     exc_freq : float
         excitation signal frequency
     datetime : str
-        YYYY/MM/DD hh/mm/ss
+        ISO 8601: YYYY/MM/DD hh/mm/ss
     """
 
     com_port: str

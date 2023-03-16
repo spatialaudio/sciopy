@@ -9,7 +9,6 @@ import numpy as np
 def SystemMessageCallback(
     serial, prnt_msg: bool = True, ret_hex_int: Union[None, str] = None
 ):
-
     """
     Reads the message buffer of a serial connection. Also prints out the general system message.
 

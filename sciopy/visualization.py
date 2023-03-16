@@ -178,9 +178,22 @@ def plot_completeness(lpath: str) -> None:
 
 
 def plot_temperatur_curve(
-    lpath: str, ret_data: bool = False
-) -> Tuple[np.ndarray, float, float]:
-    """TBD"""
+    lpath: str,
+) -> Tuple[np.ndarray, float, float, float]:
+    """
+    plot_temperatur_curve _summary_
+
+    Parameters
+    ----------
+    lpath : str
+        path to measurement directory
+
+    Returns
+    -------
+    Tuple[np.ndarray, float, float, float]
+        temperatures, mean(t), std(t), max(t)-min(t)
+    """
+
     temperature = []
     date = []
     decide_skip = np.load(lpath + os.listdir(lpath)[0], allow_pickle=True)
@@ -211,9 +224,7 @@ def plot_temperatur_curve(
     plt.ylabel("$°C$")
     plt.xlabel("sample n")
     plt.show()
-    if ret_data:
-        return temperature, mean_t, std_dev, max_min_diff
-    else:
-        print(f"mean temperature:\t {mean_t}")
-        print(f"standart deviation:\t {std_dev}")
-        print(f"max(t)-min(t):\t {max_min_diff}")
+    print(f"mean temperature:\t {mean_t}")
+    print(f"standart deviation:\t {std_dev}")
+    print(f"max(t)-min(t):\t {max_min_diff}")
+    return temperature, mean_t, std_dev, max_min_diff
