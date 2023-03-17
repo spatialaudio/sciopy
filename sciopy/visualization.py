@@ -196,6 +196,7 @@ def plot_temperatur_curve(
 
     temperature = []
     date = []
+    time = []
     decide_skip = np.load(lpath + os.listdir(lpath)[0], allow_pickle=True)
 
     if decide_skip.files[0] == "config":
@@ -204,12 +205,13 @@ def plot_temperatur_curve(
         ]:
             tmp = np.load(lpath + ele, allow_pickle=True)
             temperature.append(tmp["config"].tolist().temperature)
-            # date.append(tmp['config'].tolist().datetime.split(" ")[0])
+            date.append(tmp["config"].tolist().datetime.split(" ")[0])
+            time.append(tmp["config"].tolist().datetime.split(" ")[1][:-3])
     else:
         print("Please insert the lpath of the original measurement directory.")
 
     date = np.array(date)
-    # enable with new data
+    time = np.array(time)
     dt_string = str(np.unique(date))
 
     temperature = np.array(temperature)
@@ -219,11 +221,13 @@ def plot_temperatur_curve(
 
     plt.figure(figsize=(8, 4))
     # enable with new data
-    # plt.title(f"{lpath.split("/")[-2:-1]}, {dt_string} ")
+    plt.title(f"{lpath.split('/')[-2:-1][0]}, {dt_string[2:-2]}")
     plt.plot(temperature)
-    plt.ylabel("$°C$")
-    plt.xlabel("sample n")
+    plt.ylabel("temperature °C")
+    plt.xticks(ticks=np.arange(len(time)), labels=time)
+    plt.xlabel("time HH:MM")
     plt.show()
+
     print(f"mean temperature:\t {mean_t}")
     print(f"standart deviation:\t {std_dev}")
     print(f"max(t)-min(t):\t {max_min_diff}")

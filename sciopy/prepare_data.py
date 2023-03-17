@@ -83,7 +83,7 @@ def comp_tank_relative_r_phi(
 
     r = np.round(np.sqrt(x_abs**2 + y_abs**2), 2)
     # Pay attention to the phi position due to the phantom tank alignment.
-    phi = -np.round(math.degrees(np.arctan2(x_abs, y_abs)) - 90, 2)  # + 90
+    phi = -np.round(math.degrees(np.arctan2(x_abs, y_abs)) - 90, 2) + 90
 
     return (r, phi)
 
