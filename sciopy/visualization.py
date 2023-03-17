@@ -182,12 +182,10 @@ def plot_temperatur_curve(
 ) -> Tuple[np.ndarray, float, float, float]:
     """
     plot_temperatur_curve _summary_
-
     Parameters
     ----------
     lpath : str
         path to measurement directory
-
     Returns
     -------
     Tuple[np.ndarray, float, float, float]
@@ -222,9 +220,12 @@ def plot_temperatur_curve(
     plt.figure(figsize=(8, 4))
     # enable with new data
     plt.title(f"{lpath.split('/')[-2:-1][0]}, {dt_string[2:-2]}")
+    plt.grid()
     plt.plot(temperature)
     plt.ylabel("temperature °C")
-    plt.xticks(ticks=np.arange(len(time)), labels=time)
+    plt.xticks(
+        ticks=np.arange(len(time))[:: len(time) // 8], labels=time[:: len(time) // 8]
+    )
     plt.xlabel("time HH:MM")
     plt.show()
 
