@@ -70,8 +70,12 @@ def add_circle_anomaly(
     PyEITMesh
         _description_
     """
-    anomaly = PyEITAnomaly_Circle(center=[x_center, y_center], r=radius, perm=perm)
-    mesh_new = mesh.set_perm(mesh_obj, anomaly=anomaly, background=mesh_obj.perm)
+    anomaly = PyEITAnomaly_Circle(
+        center=[x_center, y_center], r=radius, perm=perm
+    )
+    mesh_new = mesh.set_perm(
+        mesh_obj, anomaly=anomaly, background=mesh_obj.perm
+    )
 
     return mesh_new
 
