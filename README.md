@@ -32,10 +32,4 @@ This script creates a new folder with the ending `_prepared` and puts together t
 
 Email: jacob.thoenes@uni-rostock.de
 
-```bibtex
-@Unpublished{Thoenes2023,
-  author = {Jacob Peter Thönes},
-  title  = {Python based interface module for serial communication with the ScioSpec Electrical Impedance Tomography (EIT) device.},
-  year   = {2023},
-}
-```
+[Cite sciopy](citation.cff)
