@@ -31,5 +31,3 @@ This script creates a new folder with the ending `_prepared` and puts together t
 ## Contact
 
 Email: jacob.thoenes@uni-rostock.de
-
-[Cite sciopy](citation.cff)
