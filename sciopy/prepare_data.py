@@ -215,7 +215,7 @@ def prepare_all_samples_for_16_el(prep_cnf: PreperationConfig) -> None:
                     tmp_p_mat, tmp_sample, False
                 ),
                 v_without_ext=v_without_ext,
-                abs_v_norm_without_ext=norm_data(v_without_ext),
+                abs_v_norm_without_ext=np.abs(norm_data(v_without_ext)),
                 r_phi=comp_tank_relative_r_phi(tmp_sample),
                 config=tmp_sample["config"].tolist().__dict__,
             )
