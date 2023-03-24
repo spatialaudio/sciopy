@@ -7,6 +7,7 @@ from tqdm import tqdm
 
 s_dict_n_el_16 = {
     "n_sample": [],
+    "datetime": [],
     "n_el": [],
     "n_el_skip": [],
     "channel_group": [],
@@ -41,6 +42,7 @@ s_dict_n_el_16 = {
 
 s_dict_n_el_32 = {
     "n_sample": [],
+    "datetime": [],
     "n_el": [],
     "n_el_skip": [],
     "channel_group": [],
@@ -150,6 +152,7 @@ def single_measurement_to_csv_n_el_16(
 
         for frame in sample["data"].tolist():
             s_dict_n_el_16["n_sample"].append(config.actual_sample)
+            s_dict_n_el_16["datetime"].append(config.datetime)
             s_dict_n_el_16["n_el"].append(config.n_el)
             s_dict_n_el_16["n_el_skip"].append(n_el_skip)
             s_dict_n_el_16["channel_group"].append(config.channel_group)
@@ -159,7 +162,7 @@ def single_measurement_to_csv_n_el_16(
             s_dict_n_el_16["r"].append(r)
             s_dict_n_el_16["phi"].append(phi)
             s_dict_n_el_16["water_lvl"].append(config.water_lvl)
-            s_dict_n_el_16["saline_conductivity"].append(config.saline_conductivity)
+            s_dict_n_el_16["saline_conductivity"].append(config.saline_conductivity[0])
             s_dict_n_el_16["temperature"].append(config.temperature)
             s_dict_n_el_16["exc_freq"].append(config.exc_freq)
             s_dict_n_el_16["inj_el_vcc"].append(frame.excitation_stgs[0])
@@ -174,6 +177,7 @@ def single_measurement_to_csv_n_el_16(
 
         for frame in sample["data"].tolist():
             s_dict_n_el_16["n_sample"].append(config.actual_sample)
+            s_dict_n_el_16["datetime"].append(config.datetime)
             s_dict_n_el_16["n_el"].append(config.n_el)
             s_dict_n_el_16["n_el_skip"].append(n_el_skip)
             s_dict_n_el_16["channel_group"].append(config.channel_group)
@@ -182,7 +186,7 @@ def single_measurement_to_csv_n_el_16(
             s_dict_n_el_16["material"].append(config.material)
             s_dict_n_el_16["r"].append(r)
             s_dict_n_el_16["phi"].append(phi)
-            s_dict_n_el_16["saline_conductivity"].append(config.saline_conductivity)
+            s_dict_n_el_16["saline_conductivity"].append(config.saline_conductivity[0])
             s_dict_n_el_16["temperature"].append(config.temperature)
             s_dict_n_el_16["exc_freq"].append(config.exc_freq)
             s_dict_n_el_16["inj_el_vcc"].append(frame.excitation_stgs[0])
@@ -194,7 +198,10 @@ def single_measurement_to_csv_n_el_16(
 
 
 def convert_measurement_directory_n_el_16(
-    lpath: str, s_dict_n_el_16: dict, r_split: float = -1.0, export_csv: bool = True
+    lpath: str,
+    s_dict_n_el_16: dict,
+    r_split: float = -1.0,
+    export_csv: bool = True,
 ) -> Union[None, dict]:
     """
     Converts all samples inside a measurement directory to a new generated

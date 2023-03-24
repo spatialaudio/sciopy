@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Tuple
 
 
 @dataclass
@@ -104,7 +104,7 @@ class ScioSpecMeasurementConfig:
         size of the object in percent relating the unit circle tank
     material : str
         material of the placed object
-    saline_conductivity : float
+    saline_conductivity : Tuple[float, str]
         measured conductivity of the saline
     temperature : float
         temperature of the Ender 5 printing bed
@@ -112,6 +112,8 @@ class ScioSpecMeasurementConfig:
         water level inside the phantom tank
     exc_freq : float
         excitation signal frequency
+    datetime : str
+        ISO 8601: YYYY/MM/DD hh/mm/ss
     """
 
     com_port: str
@@ -123,10 +125,11 @@ class ScioSpecMeasurementConfig:
     object: str
     size: float
     material: str
-    saline_conductivity: float
+    saline_conductivity: Tuple[float, str]
     temperature: float
     water_lvl: float
     exc_freq: float
+    datetime: str
 
 
 @dataclass

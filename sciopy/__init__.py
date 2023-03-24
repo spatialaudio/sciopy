@@ -24,7 +24,12 @@ from .print_command_info import (
 
 from .prepare_data import create_prep_directory, prepare_all_samples_for_16_el
 
-from .visualization import plot_el_sign, plot_potential_matrix, plot_completeness
+from .visualization import (
+    plot_el_sign,
+    plot_potential_matrix,
+    plot_completeness,
+    plot_temperatur_curve,
+)
 
 from .setup_m import (
     SystemMessageCallback,
@@ -147,6 +152,7 @@ __all__ = [
     "plot_potential_matrix",
     "plot_el_sign",
     "plot_completeness",
+    "plot_temperatur_curve",
     # .npztocsv
     "clear_s_dict",
     "single_measurement_to_csv_n_el_16",
