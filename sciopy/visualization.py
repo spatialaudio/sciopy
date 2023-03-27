@@ -17,11 +17,11 @@ def plot_potential_matrix(sample: np.lib.npyio.NpzFile) -> None:
         prepared sample
     """
     fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 4))
-    ax1.set_title("$\Re\{P_m\}$")
+    ax1.set_title(r"$\Re\{P_m\}$")
     ax1.imshow(np.real(sample["potential_matrix"]))
-    ax2.set_title("$\Im\{P_m\}$")
+    ax2.set_title(r"$\Im\{P_m\}$")
     ax2.imshow(np.imag(sample["potential_matrix"]))
-    ax3.set_title("$Abs\{P_m\}$")
+    ax3.set_title(r"$Abs\{P_m\}$")
     ax3.imshow(np.abs(sample["potential_matrix"]))
     fig.tight_layout()
     plt.show()
@@ -43,12 +43,12 @@ def plot_el_sign(sample: np.lib.npyio.NpzFile, norm: bool = False) -> None:
     steps = len(sample["v_without_ext"]) / n_el
 
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(9, 9))
-    ax1.set_title("Real signal part without excitation electrodes")
-    ax1.set_ylabel("$\Re\{\phi\}$")
-    ax2.set_title("Imaginary signal part without excitation electrodes")
-    ax2.set_ylabel("$\Im\{\phi\}$")
-    ax3.set_title("Absolute signal without excitation electrodes")
-    ax3.set_ylabel("$|\phi|$")
+    ax1.set_title(r"Real signal part without excitation electrodes")
+    ax1.set_ylabel(r"$\Re\{\phi\}$")
+    ax2.set_title(r"Imaginary signal part without excitation electrodes")
+    ax2.set_ylabel(r"$\Im\{\phi\}$")
+    ax3.set_title(r"Absolute signal without excitation electrodes")
+    ax3.set_ylabel(r"$|\phi|$")
     if norm is False:
         real = np.real(sample["v_without_ext"])
         imag = np.imag(sample["v_without_ext"])
@@ -224,7 +224,8 @@ def plot_temperatur_curve(
     plt.plot(temperature)
     plt.ylabel("temperature °C")
     plt.xticks(
-        ticks=np.arange(len(time))[:: len(time) // 8], labels=time[:: len(time) // 8]
+        ticks=np.arange(len(time))[:: len(time) // 8],
+        labels=time[:: len(time) // 8],
     )
     plt.xlabel("time HH:MM")
     plt.show()

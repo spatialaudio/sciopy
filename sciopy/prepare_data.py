@@ -190,6 +190,7 @@ def norm_data(data: np.ndarray, low_bound: int = 0, high_bound: int = 1) -> np.n
 def prepare_all_samples_for_16_el(
     prep_cnf: PreperationConfig,
     gen_mesh: bool = True,
+    h0: float = 0.05,
     obj_perm: float = 10.0,
     x_y_offset: float = 180,
     tank_r_inner: float = 97.0,
@@ -218,7 +219,7 @@ def prepare_all_samples_for_16_el(
     )
 
     if gen_mesh:
-        mesh_empty = create_empty_2d_mesh()
+        mesh_empty = create_empty_2d_mesh(h0=h0)
 
     if check_result:
         for sample_path in tqdm(np.sort(os.listdir(prep_cnf.lpath))):
