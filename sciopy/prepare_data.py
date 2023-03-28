@@ -56,7 +56,9 @@ def extract_potentials_from_sample_n_el_16(
 
     for stage in range(sample_data_shape_0):
         for el in range(n_el):
-            pot_matrix[stage, el] = sample["data"][stage].__dict__[f"ch_{el+1}"]
+            pot_matrix[stage, el] = sample["data"][stage].__dict__[
+                f"ch_{el+1}"
+            ]
     return pot_matrix
 
 
@@ -112,7 +114,9 @@ def check_n_el_condition(
 
     rand_sample = np.load(
         prep_cnf.lpath
-        + "sample_{0:06d}.npz".format(np.random.randint(0, prep_cnf.n_samples)),
+        + "sample_{0:06d}.npz".format(
+            np.random.randint(0, prep_cnf.n_samples)
+        ),
         allow_pickle=True,
     )
     set_ch_group = rand_sample["config"].tolist().channel_group
@@ -120,11 +124,13 @@ def check_n_el_condition(
     if set_ch_group == ch_group_to_check and set_n_el == n_el_to_check:
         return True
     else:
-        print("\tError: Data has not the right number of channels and/or electrodes!")
+        print(
+            "\tError: Data has not the right number of channels and/or electrodes!"
+        )
         return False
 
 
-def extract_electrode_signal_without_excitation_stgs(
+def extract_electrodepotentials(
     potential_matrix: np.ndarray,
     sample: np.lib.npyio.NpzFile,
     del_ex_stgs: bool = True,
@@ -151,7 +157,9 @@ def extract_electrode_signal_without_excitation_stgs(
     if del_ex_stgs is False:
         return np.reshape(potential_matrix, (p_mat_shape[0] * p_mat_shape[1],))
     if del_ex_stgs is True:
-        resh_pot = np.reshape(potential_matrix, (p_mat_shape[0] * p_mat_shape[1],))
+        resh_pot = np.reshape(
+            potential_matrix, (p_mat_shape[0] * p_mat_shape[1],)
+        )
         del_idx = []
         for r, dat in enumerate(sample["data"]):
             del_idx.append((dat.excitation_stgs - 1) + p_mat_shape[1] * r)
@@ -159,7 +167,9 @@ def extract_electrode_signal_without_excitation_stgs(
         return np.delete(resh_pot, del_idx)
 
 
-def norm_data(data: np.ndarray, low_bound: int = 0, high_bound: int = 1) -> np.ndarray:
+def norm_data(
+    data: np.ndarray, low_bound: int = 0, high_bound: int = 1
+) -> np.ndarray:
     """
     Normalise data to a given boundary. If the data is complex the absolute value ist computed.
 
@@ -223,7 +233,9 @@ def prepare_all_samples_for_16_el(
 
     if check_result:
         for sample_path in tqdm(np.sort(os.listdir(prep_cnf.lpath))):
-            tmp_sample = np.load(prep_cnf.lpath + sample_path, allow_pickle=True)
+            tmp_sample = np.load(
+                prep_cnf.lpath + sample_path, allow_pickle=True
+            )
 
             ender_stat = tmp_sample["enderstat"].tolist()
             cnfg = tmp_sample["config"].tolist()
@@ -231,9 +243,13 @@ def prepare_all_samples_for_16_el(
             abs_y_pos = (ender_stat["abs_y_pos"] - x_y_offset) / tank_r_inner
 
             tmp_p_mat = extract_potentials_from_sample_n_el_16(tmp_sample)
-            p_without_ext = extract_electrode_signal_without_excitation_stgs(
+            p_without_ext = extract_electrodepotentials(
                 tmp_p_mat, tmp_sample, True
             )
+            p_with_ext = extract_electrodepotentials(
+                tmp_p_mat, tmp_sample, False
+            )
+
             if gen_mesh:
                 mesh_obj = add_circle_anomaly(
                     mesh_empty, abs_x_pos, abs_y_pos, cnfg.size, obj_perm
@@ -242,11 +258,12 @@ def prepare_all_samples_for_16_el(
                     prep_cnf.spath + sample_path,
                     mesh=mesh_obj,
                     potential_matrix=tmp_p_mat,
-                    p_with_ext=extract_electrode_signal_without_excitation_stgs(
-                        tmp_p_mat, tmp_sample, False
-                    ),
+                    p_with_ext=p_with_ext,
                     p_without_ext=p_without_ext,
                     abs_p_norm_without_ext=np.abs(norm_data(p_without_ext)),
+                    v_with_ext=compute_v(p_with_ext),
+                    v_without_ext=compute_v(p_without_ext),
+                    abs_v_without_ext=norm_data(compute_v(p_without_ext)),
                     r_phi=comp_tank_relative_r_phi(tmp_sample),
                     config=tmp_sample["config"].tolist().__dict__,
                 )
@@ -254,13 +271,37 @@ def prepare_all_samples_for_16_el(
                 np.savez(
                     prep_cnf.spath + sample_path,
                     potential_matrix=tmp_p_mat,
-                    p_with_ext=extract_electrode_signal_without_excitation_stgs(
-                        tmp_p_mat, tmp_sample, False
-                    ),
+                    p_with_ext=p_with_ext,
                     p_without_ext=p_without_ext,
                     abs_p_norm_without_ext=np.abs(norm_data(p_without_ext)),
+                    v_with_ext=compute_v(p_with_ext),
+                    v_without_ext=compute_v(p_without_ext),
+                    abs_v_without_ext=norm_data(compute_v(p_without_ext)),
                     r_phi=comp_tank_relative_r_phi(tmp_sample),
                     config=tmp_sample["config"].tolist().__dict__,
                 )
     else:
         print("Could not start converting.")
+
+
+def compute_v(p: np.ndarray) -> np.ndarray:
+    """
+    Computes the voltage out of the potential.
+    Therefore p[0,1,...,16] - p[1,2,...,0] is computed.
+
+    Parameters
+    ----------
+    p : np.ndarray
+        measured potentials
+
+    Returns
+    -------
+    np.ndarray
+        voltage vector
+    """
+    v = []
+    for i in range(len(p) - 1):
+        v.append(p[i] - p[i + 1])
+    v.append(p[len(p) - 1] - p[0])
+
+    return np.array(v)
