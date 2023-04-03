@@ -230,11 +230,12 @@ def convert_measurement_directory_n_el_16(
         print("clearing: s_dict_n_el_16")
         s_dict_n_el_16 = clear_s_dict(s_dict_n_el_16)
 
-    for ele in tqdm(os.listdir(lpath)):
-        tmp_sample = np.load(lpath + ele, allow_pickle=True)
-        s_dict_n_el_16 = single_measurement_to_csv_n_el_16(
-            tmp_sample, s_dict_n_el_16, r_split=r_split
-        )
+    for ch_mod, ele in tqdm(enumerate(np.sort(os.listdir(lpath)))):
+        if ch_mod % 10 != 0:
+            tmp_sample = np.load(lpath + ele, allow_pickle=True)
+            s_dict_n_el_16 = single_measurement_to_csv_n_el_16(
+                tmp_sample, s_dict_n_el_16, r_split=r_split
+            )
 
     if export_csv is True:
         try:

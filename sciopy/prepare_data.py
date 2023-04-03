@@ -220,50 +220,55 @@ def prepare_all_samples_for_16_el(
 
     if gen_mesh:
         mesh_empty = create_empty_2d_mesh(h0=h0)
-
+    sf_numbering = 0
     if check_result:
-        for sample_path in tqdm(np.sort(os.listdir(prep_cnf.lpath))):
-            tmp_sample = np.load(prep_cnf.lpath + sample_path, allow_pickle=True)
+        for ch_mod, sample_path in tqdm(enumerate(np.sort(os.listdir(prep_cnf.lpath)))):
+            if ch_mod % 10 != 0:
+                tmp_sample = np.load(prep_cnf.lpath + sample_path, allow_pickle=True)
 
-            ender_stat = tmp_sample["enderstat"].tolist()
-            cnfg = tmp_sample["config"].tolist()
-            abs_x_pos = (ender_stat["abs_x_pos"] - x_y_offset) / tank_r_inner
-            abs_y_pos = (ender_stat["abs_y_pos"] - x_y_offset) / tank_r_inner
+                ender_stat = tmp_sample["enderstat"].tolist()
+                cnfg = tmp_sample["config"].tolist()
+                abs_x_pos = (ender_stat["abs_x_pos"] - x_y_offset) / tank_r_inner
+                abs_y_pos = (ender_stat["abs_y_pos"] - x_y_offset) / tank_r_inner
 
-            tmp_p_mat = extract_potentials_from_sample_n_el_16(tmp_sample)
-            p_without_ext = extract_electrodepotentials(tmp_p_mat, tmp_sample, True)
-            p_with_ext = extract_electrodepotentials(tmp_p_mat, tmp_sample, False)
+                tmp_p_mat = extract_potentials_from_sample_n_el_16(tmp_sample)
+                p_without_ext = extract_electrodepotentials(tmp_p_mat, tmp_sample, True)
+                p_with_ext = extract_electrodepotentials(tmp_p_mat, tmp_sample, False)
 
-            if gen_mesh:
-                mesh_obj = add_circle_anomaly(
-                    mesh_empty, abs_x_pos, abs_y_pos, cnfg.size, obj_perm
-                )
-                np.savez(
-                    prep_cnf.spath + sample_path,
-                    mesh=mesh_obj,
-                    potential_matrix=tmp_p_mat,
-                    p_with_ext=p_with_ext,
-                    p_without_ext=p_without_ext,
-                    abs_p_norm_without_ext=np.abs(norm_data(p_without_ext)),
-                    v_with_ext=compute_v(p_with_ext),
-                    v_without_ext=compute_v(p_without_ext),
-                    abs_v_norm_without_ext=norm_data(compute_v(p_without_ext)),
-                    r_phi=comp_tank_relative_r_phi(tmp_sample),
-                    config=tmp_sample["config"].tolist().__dict__,
-                )
+                if gen_mesh:
+                    mesh_obj = add_circle_anomaly(
+                        mesh_empty, abs_x_pos, abs_y_pos, cnfg.size, obj_perm
+                    )
+                    np.savez(
+                        prep_cnf.spath + f"sample_{sf_numbering:06}.npz",
+                        mesh=mesh_obj,
+                        potential_matrix=tmp_p_mat,
+                        p_with_ext=p_with_ext,
+                        p_without_ext=p_without_ext,
+                        abs_p_norm_without_ext=np.abs(norm_data(p_without_ext)),
+                        v_with_ext=compute_v(p_with_ext),
+                        v_without_ext=compute_v(p_without_ext),
+                        abs_v_norm_without_ext=norm_data(compute_v(p_without_ext)),
+                        r_phi=comp_tank_relative_r_phi(tmp_sample),
+                        config=tmp_sample["config"].tolist().__dict__,
+                    )
+                else:
+                    np.savez(
+                        prep_cnf.spath + f"sample_{sf_numbering:06}.npz",
+                        potential_matrix=tmp_p_mat,
+                        p_with_ext=p_with_ext,
+                        p_without_ext=p_without_ext,
+                        abs_p_norm_without_ext=np.abs(norm_data(p_without_ext)),
+                        v_with_ext=compute_v(p_with_ext),
+                        v_without_ext=compute_v(p_without_ext),
+                        abs_v_norm_without_ext=norm_data(compute_v(p_without_ext)),
+                        r_phi=comp_tank_relative_r_phi(tmp_sample),
+                        config=tmp_sample["config"].tolist().__dict__,
+                    )
+                sf_numbering += 1
             else:
-                np.savez(
-                    prep_cnf.spath + sample_path,
-                    potential_matrix=tmp_p_mat,
-                    p_with_ext=p_with_ext,
-                    p_without_ext=p_without_ext,
-                    abs_p_norm_without_ext=np.abs(norm_data(p_without_ext)),
-                    v_with_ext=compute_v(p_with_ext),
-                    v_without_ext=compute_v(p_without_ext),
-                    abs_v_norm_without_ext=norm_data(compute_v(p_without_ext)),
-                    r_phi=comp_tank_relative_r_phi(tmp_sample),
-                    config=tmp_sample["config"].tolist().__dict__,
-                )
+                pass
+                # Due to errors inside the ScioSpec software taking only burst_count-1 samples
     else:
         print("Could not start converting.")
 
