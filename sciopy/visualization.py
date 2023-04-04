@@ -21,7 +21,7 @@ def plot_potential_matrix(sample: np.lib.npyio.NpzFile) -> None:
     ax1.imshow(np.real(sample["potential_matrix"]))
     ax2.set_title(r"$\Im\{P_m\}$")
     ax2.imshow(np.imag(sample["potential_matrix"]))
-    ax3.set_title(r"$Abs\{P_m\}$")
+    ax3.set_title(r"$|P_m|$")
     ax3.imshow(np.abs(sample["potential_matrix"]))
     fig.tight_layout()
     plt.show()
