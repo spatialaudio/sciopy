@@ -8,4 +8,4 @@ developing.ipynb
 update_package.sh
 update_test_pypi.sh
 tst_smpls
-
+.vscode

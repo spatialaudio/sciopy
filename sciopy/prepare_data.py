@@ -4,6 +4,7 @@ from tqdm import tqdm
 import numpy as np
 
 from .sciopy_dataclasses import PreperationConfig
+from .meshing import create_empty_2d_mesh, add_circle_anomaly
 
 
 def create_prep_directory(prep_cnf: PreperationConfig) -> str:
@@ -123,7 +124,7 @@ def check_n_el_condition(
         return False
 
 
-def extract_electrode_signal_without_excitation_stgs(
+def extract_electrodepotentials(
     potential_matrix: np.ndarray,
     sample: np.lib.npyio.NpzFile,
     del_ex_stgs: bool = True,
@@ -186,38 +187,110 @@ def norm_data(data: np.ndarray, low_bound: int = 0, high_bound: int = 1) -> np.n
     return np.array(norm_data)
 
 
-def prepare_all_samples_for_16_el(prep_cnf: PreperationConfig) -> None:
+def prepare_all_samples_for_16_el(
+    prep_cnf: PreperationConfig,
+    gen_mesh: bool = True,
+    h0: float = 0.05,
+    obj_perm: float = 10.0,
+    x_y_offset: float = 180,
+    tank_r_inner: float = 97.0,
+) -> None:
     """
     Converts all samples inside one directory that were recorded in 16
     electrode mode and save the potential and positional data to a target directory.
+    Furthermore a mesh is generated.
 
     Parameters
     ----------
     prep_cnf : PreperationConfig
-        _description_
+        configuration dataclass
+    gen_mesh : bool, optional
+        generate a mesh, by default True
+    obj_perm : float, optional
+        permittivity of the circle object, by default 10.0
+    x_y_offset : float, optional
+        Ender 5 x,y-axis offset, by default 180
+    tank_r_inner : float, optional
+        inner tank radius, by default 97.0
     """
 
     check_result = check_n_el_condition(
         prep_cnf, ch_group_to_check=[1], n_el_to_check=16
     )
 
+    if gen_mesh:
+        mesh_empty = create_empty_2d_mesh(h0=h0)
+    sf_numbering = 0
     if check_result:
-        for sample_path in tqdm(np.sort(os.listdir(prep_cnf.lpath))):
-            tmp_sample = np.load(prep_cnf.lpath + sample_path, allow_pickle=True)
-            tmp_p_mat = extract_potentials_from_sample_n_el_16(tmp_sample)
-            v_without_ext = extract_electrode_signal_without_excitation_stgs(
-                tmp_p_mat, tmp_sample, True
-            )
-            np.savez(
-                prep_cnf.spath + sample_path,
-                potential_matrix=tmp_p_mat,
-                v_with_ext=extract_electrode_signal_without_excitation_stgs(
-                    tmp_p_mat, tmp_sample, False
-                ),
-                v_without_ext=v_without_ext,
-                abs_v_norm_without_ext=norm_data(v_without_ext),
-                r_phi=comp_tank_relative_r_phi(tmp_sample),
-                config=tmp_sample["config"].tolist().__dict__,
-            )
+        for ch_mod, sample_path in tqdm(enumerate(np.sort(os.listdir(prep_cnf.lpath)))):
+            if ch_mod % 10 != 0:
+                tmp_sample = np.load(prep_cnf.lpath + sample_path, allow_pickle=True)
+
+                ender_stat = tmp_sample["enderstat"].tolist()
+                cnfg = tmp_sample["config"].tolist()
+                abs_x_pos = (ender_stat["abs_x_pos"] - x_y_offset) / tank_r_inner
+                abs_y_pos = (ender_stat["abs_y_pos"] - x_y_offset) / tank_r_inner
+
+                tmp_p_mat = extract_potentials_from_sample_n_el_16(tmp_sample)
+                p_without_ext = extract_electrodepotentials(tmp_p_mat, tmp_sample, True)
+                p_with_ext = extract_electrodepotentials(tmp_p_mat, tmp_sample, False)
+
+                if gen_mesh:
+                    mesh_obj = add_circle_anomaly(
+                        mesh_empty, abs_x_pos, abs_y_pos, cnfg.size, obj_perm
+                    )
+                    np.savez(
+                        prep_cnf.spath + f"sample_{sf_numbering:06}.npz",
+                        mesh=mesh_obj,
+                        potential_matrix=tmp_p_mat,
+                        p_with_ext=p_with_ext,
+                        p_without_ext=p_without_ext,
+                        abs_p_norm_without_ext=np.abs(norm_data(p_without_ext)),
+                        v_with_ext=compute_v(p_with_ext),
+                        v_without_ext=compute_v(p_without_ext),
+                        abs_v_norm_without_ext=norm_data(compute_v(p_without_ext)),
+                        r_phi=comp_tank_relative_r_phi(tmp_sample),
+                        config=tmp_sample["config"].tolist().__dict__,
+                    )
+                else:
+                    np.savez(
+                        prep_cnf.spath + f"sample_{sf_numbering:06}.npz",
+                        potential_matrix=tmp_p_mat,
+                        p_with_ext=p_with_ext,
+                        p_without_ext=p_without_ext,
+                        abs_p_norm_without_ext=np.abs(norm_data(p_without_ext)),
+                        v_with_ext=compute_v(p_with_ext),
+                        v_without_ext=compute_v(p_without_ext),
+                        abs_v_norm_without_ext=norm_data(compute_v(p_without_ext)),
+                        r_phi=comp_tank_relative_r_phi(tmp_sample),
+                        config=tmp_sample["config"].tolist().__dict__,
+                    )
+                sf_numbering += 1
+            else:
+                pass
+                # Due to errors inside the ScioSpec software taking only burst_count-1 samples
     else:
         print("Could not start converting.")
+
+
+def compute_v(p: np.ndarray) -> np.ndarray:
+    """
+    Computes the voltage out of the potential.
+    Therefore p[0,1,...,16] - p[1,2,...,0] is computed.
+
+    Parameters
+    ----------
+    p : np.ndarray
+        measured potentials
+
+    Returns
+    -------
+    np.ndarray
+        voltage vector
+    """
+    v = []
+    for i in range(len(p) - 1):
+        v.append(p[i] - p[i + 1])
+    v.append(p[len(p) - 1] - p[0])
+
+    return np.array(v)

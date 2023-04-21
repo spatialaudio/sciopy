@@ -22,7 +22,16 @@ from .print_command_info import (
     print_command_list,
 )
 
-from .prepare_data import create_prep_directory, prepare_all_samples_for_16_el
+from .prepare_data import (
+    create_prep_directory,
+    extract_potentials_from_sample_n_el_16,
+    comp_tank_relative_r_phi,
+    check_n_el_condition,
+    extract_electrodepotentials,
+    norm_data,
+    prepare_all_samples_for_16_el,
+    compute_v,
+)
 
 from .visualization import (
     plot_el_sign,
@@ -81,6 +90,13 @@ from .npztocsv import (
     single_measurement_to_csv_n_el_16,
     convert_measurement_directory_n_el_16,
     convert_measurement_directory_n_el_16_r_split,
+)
+
+from .meshing import (
+    create_empty_2d_mesh,
+    add_circle_anomaly,
+    plot_mesh,
+    mesh_sample,
 )
 
 # TBD from .configurations import configuration_01
@@ -147,7 +163,13 @@ __all__ = [
     "configure_configuration",
     # .prepare_data
     "create_prep_directory",
+    "extract_potentials_from_sample_n_el_16",
+    "comp_tank_relative_r_phi",
+    "check_n_el_condition",
+    "extract_electrodepotentials",
+    "norm_data",
     "prepare_all_samples_for_16_el",
+    "compute_v",
     # .visualization
     "plot_potential_matrix",
     "plot_el_sign",
@@ -158,4 +180,9 @@ __all__ = [
     "single_measurement_to_csv_n_el_16",
     "convert_measurement_directory_n_el_16",
     "convert_measurement_directory_n_el_16_r_split",
+    # .meshing
+    "create_empty_2d_mesh",
+    "add_circle_anomaly",
+    "plot_mesh",
+    "mesh_sample",
 ]
