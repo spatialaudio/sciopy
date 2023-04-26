@@ -1,6 +1,6 @@
 from sciopy import (
     create_prep_directory,
-    prepare_all_samples_for_16_el,
+    prepare_all_samples_for_16_el_single,
     extract_potentials_from_sample_n_el_16,
 )
 from sciopy.sciopy_dataclasses import PreperationConfig
@@ -19,7 +19,7 @@ prep_cnf = PreperationConfig(lpath, "", 0)
 prep_cnf = create_prep_directory(prep_cnf)
 
 # Convert all samples from load path to save path.
-extract_potentials_from_sample_n_el_16(prep_cnf)
+prepare_all_samples_for_16_el_single(prep_cnf)
 
-# Use the following function if an ender printer is selected:
+# Use the following function if positional data is available:
 # prepare_all_samples_for_16_el(prep_cnf)
