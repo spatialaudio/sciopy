@@ -30,6 +30,7 @@ from .prepare_data import (
     extract_electrodepotentials,
     norm_data,
     prepare_all_samples_for_16_el,
+    prepare_all_samples_for_16_el_single,
     compute_v,
 )
 
@@ -169,6 +170,7 @@ __all__ = [
     "extract_electrodepotentials",
     "norm_data",
     "prepare_all_samples_for_16_el",
+    "prepare_all_samples_for_16_el_single",
     "compute_v",
     # .visualization
     "plot_potential_matrix",
