@@ -269,7 +269,7 @@ def GetMeasurementSetup(serial) -> None:
     SystemMessageCallback(serial)  # [CT] 02 0C [Type] [CT]
 
 
-def SetBurstCount(serial, measuremen_cnf: ScioSpecMeasurementConfig) -> None:
+def SetBurstCount(serial, cnf: ScioSpecMeasurementConfig) -> None:
     """
     Set the burst count to one of the provided values [1, 5, 10, 100].
 
@@ -277,22 +277,15 @@ def SetBurstCount(serial, measuremen_cnf: ScioSpecMeasurementConfig) -> None:
     ----------
     serial :
         serial connection
-    measuremen_cnf : ScioSpecMeasurementConfig
+    cnf : ScioSpecMeasurementConfig
         dataclass object with configurations
 
     Returns
     -------
     None
     """
-    if measuremen_cnf.burst_count == 1:
-        serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x01, 0xB0]))
-    elif measuremen_cnf.burst_count == 5:
-        serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x05, 0xB0]))
-    elif measuremen_cnf.burst_count == 10:
-        serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x0A, 0xB0]))
-    elif measuremen_cnf.burst_count == 100:
-        serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x64, 0xB0]))
-    print(f"Set burst count to {measuremen_cnf.burst_count}.")
+    serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, hex(cnf.burst_count), 0xB0]))
+    print(f"Set burst count to {cnf.burst_count}.")
     SystemMessageCallback(serial)
 
 
