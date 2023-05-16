@@ -78,12 +78,6 @@ from .configurations import (
     conf_n_el_32_adjacent,
     conf_n_el_16_opposite,
     conf_n_el_32_opposite,
-    configuration_01,
-    configuration_02,
-    configuration_03,
-    configuration_04,
-    configuration_05,
-    configure_configuration,
 )
 
 from .npztocsv import (
@@ -156,12 +150,7 @@ __all__ = [
     "conf_n_el_32_adjacent",
     "conf_n_el_16_opposite",
     "conf_n_el_32_opposite",
-    "configuration_01",
-    "configuration_02",
-    "configuration_03",
-    "configuration_04",
-    "configuration_05",
-    "configure_configuration",
+    # "configure_configuration",
     # .prepare_data
     "create_prep_directory",
     "extract_potentials_from_sample_n_el_16",
