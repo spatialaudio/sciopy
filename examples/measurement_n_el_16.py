@@ -31,7 +31,7 @@ scio_spec_measurement_config = ScioSpecMeasurementConfig(
 )
 
 # Connect ScioSpec device
-COM_ScioSpec = connect_COM_port(port="COM3")
+COM_ScioSpec = connect_COM_port(port=scio_spec_measurement_config.com_port)
 # Send configuration
 scio_spec_measurement_config = conf_n_el_16_adjacent(
     COM_ScioSpec, scio_spec_measurement_config
