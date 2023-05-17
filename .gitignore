@@ -3,6 +3,7 @@ build/
 dist/
 .eggs/
 sciopy.egg-info/
+.ipynb_checkpoints
 .ipynb
 developing.ipynb
 update_package.sh
@@ -11,3 +12,8 @@ tst_smpls
 .vscode
 3dgeo
 3dgeo/*
+32_electrodes.ipynb
+examples/npz_to_csv_enderstat.py
+examples/npz_to_csv.py
+examples/measuremet_16/*
+examples/measuremet_32/*
