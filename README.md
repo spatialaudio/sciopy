@@ -13,7 +13,7 @@ All requirements are provided inside the `requirements.txt`. To install them nav
 
 For a single measurement, you can simply run the `measurement.py` script using the command:
 
-    python measurement.py
+    python measurement_n_el_16.py
 
 This script establishes a serial connection to the ScioSpec device, sends the measurement configuration, and starts a 
 measurement with a burst count of 10. For a successful measurement, you have to plug in the 16 electrodes to the port "channel 1-16" at the ScioSpec device. For saving the data, set `save = True` and insert a valid `s_path` to the `scio_spec_measurement_config` at the beginning of the script.
