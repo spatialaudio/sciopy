@@ -142,7 +142,10 @@ def single_measurement_to_csv_n_el_16(
         appended saving dictionary
     """
     config = sample["config"].tolist()
-    r, phi = comp_tank_relative_r_phi(sample)
+    if r_split != -1.0:
+        r, phi = comp_tank_relative_r_phi(sample)
+    if r_split == -1.0:
+        r = -1
 
     if r == float(r_split) and r_split >= 0:
         n_el_skip = (
@@ -184,8 +187,8 @@ def single_measurement_to_csv_n_el_16(
             s_dict_n_el_16["object"].append(config.object)
             s_dict_n_el_16["size"].append(config.size)
             s_dict_n_el_16["material"].append(config.material)
-            s_dict_n_el_16["r"].append(r)
-            s_dict_n_el_16["phi"].append(phi)
+            s_dict_n_el_16["r"].append(0)
+            s_dict_n_el_16["phi"].append(0)
             s_dict_n_el_16["saline_conductivity"].append(config.saline_conductivity[0])
             s_dict_n_el_16["temperature"].append(config.temperature)
             s_dict_n_el_16["exc_freq"].append(config.exc_freq)
