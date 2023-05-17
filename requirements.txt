@@ -3,5 +3,5 @@ numpy==1.22.3
 pandas==1.2.4
 pyeit==1.2.4
 pyserial==3.5
-setuptools==61.2.0
+setuptools==67.7.2
 tqdm==4.60.0
