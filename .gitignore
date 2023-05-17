@@ -14,3 +14,5 @@ tst_smpls
 3dgeo/*
 32_electrodes.ipynb
 examples/npz_to_csv_enderstat.py
+examples/measuremet_16/*
+examples/measuremet_32/*

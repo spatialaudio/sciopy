@@ -200,7 +200,16 @@ def SetMeasurementSetup(
     write_part(serial, frame_rate)
 
     exc_freq = bytearray(
-        [0xB0, 0x0C, 0x04, exc_freq[0], exc_freq[1], exc_freq[2], exc_freq[3], 0xB0]
+        [
+            0xB0,
+            0x0C,
+            0x04,
+            exc_freq[0],
+            exc_freq[1],
+            exc_freq[2],
+            exc_freq[3],
+            0xB0,
+        ]
     )
     write_part(serial, exc_freq)
 
