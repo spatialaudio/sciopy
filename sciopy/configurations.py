@@ -9,7 +9,7 @@ def conf_n_el_16_adjacent(
     """
     Amplitude 	1 mA
     Framerate 	10
-    Burst Count 10 (cnf)
+    Burst Count 10 (forced)
     Range 		+/-5V
     Gain 		1
     Min/Max f 	10.000	Steps 1	Scale LINEAR
@@ -21,7 +21,7 @@ def conf_n_el_16_adjacent(
     """
 
     serial.write(bytearray([0xB0, 0x01, 0x01, 0xB0]))
-    serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, hex(cnf.burst_count), 0xB0]))
+    serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x0A, 0xB0]))
     serial.write(
         bytearray(
             [
@@ -90,7 +90,7 @@ def conf_n_el_16_adjacent(
     serial.write(bytearray([0xB4, 0x01, 0x00, 0xB4]))
     return ScioSpecMeasurementConfig(
         com_port=serial.name,
-        burst_count=cnf.burst_count,
+        burst_count=10,
         n_el=16,
         channel_group=[1],
         actual_sample=cnf.actual_sample,
@@ -112,7 +112,7 @@ def conf_n_el_16_opposite(
     """
     Amplitude 	1 mA
     Framerate 	10
-    Burst Count 10 (cnf)
+    Burst Count 10 (forced)
     Range 		+/-5V
     Gain 		1
     Min/Max f 	10.000	Steps 1	Scale LINEAR
@@ -123,7 +123,7 @@ def conf_n_el_16_opposite(
     Switch Type 	Reed Relays
     """
     serial.write(bytearray([0xB0, 0x01, 0x01, 0xB0]))
-    serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, hex(cnf.burst_count), 0xB0]))
+    serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x0A, 0xB0]))
     serial.write(
         bytearray(
             [
@@ -192,7 +192,7 @@ def conf_n_el_16_opposite(
     serial.write(bytearray([0xB4, 0x01, 0x00, 0xB4]))
     return ScioSpecMeasurementConfig(
         serial.name,
-        burst_count=cnf.burst_count,
+        burst_count=10,
         n_el=16,
         channel_group=[1],
         actual_sample=cnf.actual_sample,
@@ -214,7 +214,7 @@ def conf_n_el_32_adjacent(
     """
     Amplitude 	1 mA
     Framerate 	10
-    Burst Count 1 (pay attention to maximal buffer size)
+    Burst Count 1 (forced)
     Range 		+/-5V
     Gain 		1
     Min/Max f 	10.000	Steps 1	Scale LINEAR
@@ -225,7 +225,7 @@ def conf_n_el_32_adjacent(
     Switch Type 	Reed Relays
     """
     serial.write(bytearray([0xB0, 0x01, 0x01, 0xB0]))
-    serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, hex(cnf.burst_count), 0xB0]))
+    serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, 0x01, 0xB0]))
     serial.write(
         bytearray(
             [
@@ -310,7 +310,7 @@ def conf_n_el_32_adjacent(
     serial.write(bytearray([0xB4, 0x01, 0x00, 0xB4]))
     return ScioSpecMeasurementConfig(
         serial.name,
-        burst_count=cnf.burst_count,
+        burst_count=1,
         n_el=32,
         channel_group=[1, 2],
         actual_sample=cnf.actual_sample,
@@ -332,7 +332,7 @@ def conf_n_el_32_opposite(
     """
     Amplitude 	1 mA
     Framerate 	10
-    Burst Count 1 (pay attention to maximal buffer size)
+    Burst Count 1 (forced)
     Range 		+/-5V
     Gain 		1
     Min/Max f 	10.000	Steps 1	Scale LINEAR
