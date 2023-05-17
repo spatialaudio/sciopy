@@ -24,9 +24,7 @@ This script creates a new folder with the ending `_prepared` and puts together t
 
 ## TBD
 
-- Measurement using 32 electrodes.
-- Parsing measurements of 32 electrodes.
-- Adjacent and opposite drive patterns for 32 electrodes.
+- Measurement using 48, 64 electrodes.
 
 ## Contact
 
