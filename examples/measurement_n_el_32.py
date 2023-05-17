@@ -14,12 +14,12 @@ from sciopy import (
 from sciopy.sciopy_dataclasses import ScioSpecMeasurementConfig
 
 scio_spec_measurement_config = ScioSpecMeasurementConfig(
-    com_port="COM3",
+    com_port="/dev/ttyACM0",
     burst_count=1,
     n_el=32,
     channel_group=[1, 2],
     actual_sample=0,
-    s_path="",
+    s_path="measurement_32/",
     object="circle",
     size=0.1,
     material="PLA",
@@ -42,7 +42,7 @@ SystemMessageCallback(COM_ScioSpec, prnt_msg=True)
 # Start and stop single measurement
 measurement_data_hex = StartStopMeasurement(COM_ScioSpec)
 # Delete hex in mesured buffer
-measurement_data = del_hex_in_list(measurement_data_hex)
+measurement_data = del_hex_in_list(measurement_data_hex)[4:]
 # Reshape the full mesaurement buffer. Depending on number of electrodes
 split_measurement_data = reshape_full_message_in_bursts(
     measurement_data, scio_spec_measurement_config
@@ -52,7 +52,7 @@ measurement_data = split_bursts_in_frames(
 )
 
 # Set to "True" to save single measurement
-save = False
+save = True
 
 if save:
     files_offset = scio_spec_measurement_config.actual_sample

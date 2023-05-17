@@ -14,12 +14,12 @@ from sciopy import (
 from sciopy.sciopy_dataclasses import ScioSpecMeasurementConfig
 
 scio_spec_measurement_config = ScioSpecMeasurementConfig(
-    com_port="COM3",
+    com_port="/dev/ttyACM0",  # substitute your com port
     burst_count=10,
     n_el=16,
     channel_group=[1],
-    actual_sample=0,
-    s_path="measurement_1",
+    actual_sample=0,  # start sample number
+    s_path="measurement_16/",
     object="circle",
     size=0.1,
     material="PLA",
@@ -52,7 +52,7 @@ measurement_data = split_bursts_in_frames(
 )
 
 # Set to "True" to save single measurement
-save = False
+save = True
 
 if save:
     files_offset = scio_spec_measurement_config.actual_sample
