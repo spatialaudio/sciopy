@@ -69,11 +69,12 @@ from .setup_m import (
     DisableLED_AutoMode,
     EnableLED_AutoMode,
     PowerPlugDetect,
-    GetDevideInfo,
+    GetDeviceInfo,
     GetFirmwareIDs,
 )
 
 from .configurations import (
+    set_measurement_config,
     conf_n_el_16_adjacent,
     conf_n_el_32_adjacent,
     conf_n_el_16_opposite,
@@ -143,9 +144,10 @@ __all__ = [
     "DisableLED_AutoMode",
     "EnableLED_AutoMode",
     "PowerPlugDetect",
-    "GetDevideInfo",
+    "GetDeviceInfo",
     "GetFirmwareIDs",
     # .configurations
+    "set_measurement_config",
     "conf_n_el_16_adjacent",
     "conf_n_el_32_adjacent",
     "conf_n_el_16_opposite",
