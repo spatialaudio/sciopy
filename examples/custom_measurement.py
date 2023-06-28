@@ -20,6 +20,7 @@ sciospec_measurement_setup = ScioSpecMeasurementSetup(
     burst_count=1,
     total_meas_num=10,
     n_el=16,
+    channel_group=[1],
     exc_freq=10_000,
     framerate=5,
     amplitude=10,

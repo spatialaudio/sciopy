@@ -576,8 +576,8 @@ def split_bursts_in_frames(
         for subframe in range(subframe_length):
             parsed_sgl_frame = parse_single_frame(tmp_split_list[subframe])
             # Select the right channel group data
-            # if parsed_sgl_frame.channel_group in cnf.channel_group:
-            frame.append(parsed_sgl_frame)
+            if parsed_sgl_frame.channel_group in cnf.channel_group:
+                frame.append(parsed_sgl_frame)
         burst_frame.append(frame)
         frame = []  # Reset channel depending single burst frame
     return np.array(burst_frame)

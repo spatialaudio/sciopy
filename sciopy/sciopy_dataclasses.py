@@ -7,6 +7,7 @@ class ScioSpecMeasurementSetup:
     burst_count: int
     total_meas_num: int
     n_el: int
+    channel_group: list
     exc_freq: Union[int, float]
     framerate: Union[int, float]
     amplitude: Union[int, float]
