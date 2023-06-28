@@ -28,7 +28,6 @@ sciospec_measurement_setup = ScioSpecMeasurementSetup(
     gain=1,
     adc_range=1,
     notes="None",
-    channel_group=[1],
     configured=False,
 )
 
