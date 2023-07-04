@@ -1,5 +1,21 @@
 from dataclasses import dataclass
-from typing import List, Tuple
+from typing import List, Tuple, Union
+
+
+@dataclass
+class ScioSpecMeasurementSetup:
+    burst_count: int
+    total_meas_num: int
+    n_el: int
+    channel_group: list
+    exc_freq: Union[int, float]
+    framerate: Union[int, float]
+    amplitude: Union[int, float]
+    inj_skip: str
+    gain: int
+    adc_range: int
+    notes: str
+    configured: bool
 
 
 @dataclass

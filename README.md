@@ -11,7 +11,7 @@ All requirements are provided inside the `requirements.txt`. To install them nav
 
 ## Run Example Script
 
-For a single measurement, you can simply run the `measurement.py` script using the command:
+For a single measurement, you can simply run the `example` scripts using the command:
 
     python measurement_n_el_16.py
 
@@ -21,10 +21,27 @@ measurement with a burst count of 10. For a successful measurement, you have to 
 The second provided example script `prep_data_for_ml.py` can be used for the conversion of a finished measurement.
 This script creates a new folder with the ending `_prepared` and puts together the potential values and object positions for all measurements. This could be useful for later application of machine learning. 
 
+## Explanation of stored files (.npz)
+
+
+- `potential matrix` (e.g. variable P) is a 16x16 matrix (n_el=16). If you visualize it using `from sciopy import plot_potential_matrix` you can recognize the used excitation pattern or if an electrode is a defect.
+- `p_with_exc` is the matrix P with the excitation electrodes
+- `p_without_exc` is the matrix P without the excitation electrodes
+- `abs_p_norm_without_ext` is the matrix, normalized between (I think) 0-1 without the excitation electrodes.
+- `v_with_ext` is the computed voltage from the potential values containing the excitation electrodes
+- `v_without_ext` is the computed voltage from the potential values without the excitation electrodes
+- `abs_v_norm_without_ext` is the voltage data, normalized between 0-1 without the excitation electrodes.
+- `config` contains some information regarding the measurement procedure.
 
 ## TBD
 
-- Measurement using 48, 64 electrodes.
+- [ ] Communication using LAN connection.
+- [ ] Measurements using 48, 64 electrodes.
+- [ ] Adjacent and opposite injection pattern combination.
+- [x] Measurements using 32 electrodes.
+- [x] Parsing measurements of 32 electrodes.
+- [x] Adjacent and opposite drive patterns for 32 electrodes.
+- [x] Measurement using 16 electrodes in opposite and adjacent injection pattern.
 
 ## Contact
 

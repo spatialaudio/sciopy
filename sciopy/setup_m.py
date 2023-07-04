@@ -788,7 +788,7 @@ def PowerPlugDetect(serial) -> None:
     SystemMessageCallback(serial)
 
 
-def GetDevideInfo(serial) -> None:
+def GetDeviceInfo(serial) -> None:
     """
     Print device information.
 
