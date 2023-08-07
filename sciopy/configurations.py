@@ -679,7 +679,7 @@ def conf_n_el_48_adjacent(
     )
 
 
-def conf_n_el_64_opposite(
+def conf_n_el_48_opposite(
     serial, cnf: ScioSpecMeasurementConfig
 ) -> ScioSpecMeasurementConfig:
     """
