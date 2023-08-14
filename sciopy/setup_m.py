@@ -546,6 +546,26 @@ def reshape_full_message_in_bursts(
     for split in range(cnf.burst_count):
         split_list.append(lst[split * split_length : (split + 1) * split_length])
     return np.array(split_list)
+    
+
+def length_correction(array):
+    seq_index = 0
+    mask = np.ones(len(array), dtype=bool)
+    seq_to_remove = ['18' ,'1' ,'92' ,'18']
+    for i in range(len(array)):
+        if seq_to_remove[seq_index] in array[i]:
+            seq_index += 1
+            if seq_index == len(seq_to_remove):
+                start = i - len(seq_to_remove) + 1
+                end = i + 1
+                mask[start:end] = False
+                seq_index = 0
+        else:
+            seq_index = 0
+            
+    new_array = array[mask]
+    return new_array
+
 
 
 def split_bursts_in_frames(
