@@ -21,12 +21,12 @@ sciospec_measurement_setup = ScioSpecMeasurementSetup(
     total_meas_num=10,
     n_el=16,
     channel_group=[1],
-    exc_freq=10_000,
+    exc_freq=10_000,  # Hz
     framerate=5,
-    amplitude=10,
+    amplitude=0.01,  # 10mA
     inj_skip=0,
     gain=1,
-    adc_range=1,
+    adc_range=1,  # +/- 1V
     notes="None",
     configured=False,
 )
