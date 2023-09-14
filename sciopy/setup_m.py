@@ -385,6 +385,38 @@ def bytesarray_to_float(bytes_array: np.ndarray) -> float:
     return struct.unpack("!f", bytes(bytes_array))[0]
 
 
+def length_correction(array):
+    """
+   Converts our message length with extra blocks of ['18' ,'1' ,'92' ,'18'] for 48 and 64 electrodes to the correct length.
+
+    Parameters
+    ----------
+    bytes_array : np.ndarray
+        array of bytes
+
+    Returns
+    -------
+     np.ndarray
+        message without ['18' ,'1' ,'92' ,'18'] block
+    """
+    seq_index = 0
+    mask = np.ones(len(array), dtype=bool)
+    seq_to_remove = ['18' ,'1' ,'92' ,'18']
+    for i in range(len(array)):
+        if seq_to_remove[seq_index] in array[i]:
+            seq_index += 1
+            if seq_index == len(seq_to_remove):
+                start = i - len(seq_to_remove) + 1
+                end = i + 1
+                mask[start:end] = False
+                seq_index = 0
+        else:
+            seq_index = 0
+            
+    new_array = array[mask]
+    return new_array
+
+
 def bytesarray_to_int(bytes_array: np.ndarray) -> int:
     """
     Converts a bytes array to int number.
