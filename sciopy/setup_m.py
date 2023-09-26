@@ -570,6 +570,28 @@ def reshape_full_message_in_bursts(
     - delete acknowledgement message: lst.shape=(4480,0) | lst.shape=(89600,)
     - split this depending on burst count: split_list.shape=(5, 8960) | split_list.shape=(5, 17920)
     """
+
+    def length_correction(array: list) -> list:
+        """
+        Implemented by: Oveys Javanmardtilaki
+        """
+        seq_index = 0
+        mask = np.ones(len(array), dtype=bool)
+        seq_to_remove = ["18", "1", "92", "18"]
+        for i in range(len(array)):
+            if seq_to_remove[seq_index] in array[i]:
+                seq_index += 1
+                if seq_index == len(seq_to_remove):
+                    start = i - len(seq_to_remove) + 1
+                    end = i + 1
+                    mask[start:end] = False
+                    seq_index = 0
+            else:
+                seq_index = 0
+        new_array = array[mask]
+        return new_array
+
+    lst = length_correction(lst)
     split_list = []
     # delete acknowledgement message
     lst = lst[4:]

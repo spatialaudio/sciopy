@@ -61,9 +61,11 @@ def set_measurement_config(serial, ssms: ScioSpecMeasurementSetup) -> None:
     # Excitation amplitude double precision
     # A_min = 100nA
     # A_max = 10mA
-    if ssms.amplitude > 0.001:
-        print(f"Divide {ssms.amplitude}/1000. Out of available range")
-        ssms.amplitude = ssms.amplitude / 1000
+    if ssms.amplitude > 0.01:
+        print(
+            f"Amplitude {ssms.amplitude}A is out of available range.\nSet amplitude to 10mA."
+        )
+        ssms.amplitude = 0.01
     serial.write(
         bytearray(list(np.concatenate([[176, 9, 5], clTbt_dp(ssms.amplitude), [176]])))
     )
