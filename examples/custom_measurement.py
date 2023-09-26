@@ -17,17 +17,22 @@ s_path = ""
 files_offset = 0
 
 sciospec_measurement_setup = ScioSpecMeasurementSetup(
-    burst_count=1,
-    total_meas_num=10,
-    n_el=16,
-    channel_group=[1],
+    burst_count=1,  # The number of measurements to be performed.
+    total_meas_num=10,  # Repetitions of burst count
+    n_el=64,  # Set 16, 32, 48 or 64 and do not forget to change the channel_group.
+    channel_group=[
+        1,
+        2,
+        3,
+        4,
+    ],  # Use [1] for n_el=16, [1,2] for n_el=32, [1,2,3] for n_el=48, and [1,2,3,4] for n_el=64
     exc_freq=10_000,  # 10,000Hz = 10kHz
-    framerate=5,
+    framerate=5,  # Measurements per second
     amplitude=0.01,  # 0.01A = 10mA (maximum)
-    inj_skip=0,
+    inj_skip=0,  # injection electrode skip
     gain=1,
     adc_range=1,  # +/- 1V
-    notes="None",
+    notes="None",  # add measurement information
     configured=False,
 )
 

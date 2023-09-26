@@ -11,18 +11,23 @@ All requirements are provided inside the `requirements.txt`. To install them nav
 
 ## Run Example Script
 
-For a single measurement, you can simply run the `example` scripts using the command:
+For a single measurement, you can simply run one of the `example` scripts using the command:
 
-    python measurement_n_el_16.py
+    python custom_measurement.py
+
+To fing the right port you can use:
+
+
+    from sciopy import available_serial_ports
+    available_serial_ports()
 
 This script establishes a serial connection to the ScioSpec device, sends the measurement configuration, and starts a 
-measurement with a burst count of 10. For a successful measurement, you have to plug in the 16 electrodes to the port "channel 1-16" at the ScioSpec device. For saving the data, set `save = True` and insert a valid `s_path` to the `scio_spec_measurement_config` at the beginning of the script.
+measurement. For a successful measurement with 16 electordes, you have to plug in the 16 electrodes to the port "channel 1-16" at the ScioSpec device. For saving the data, set `save = True` and insert a valid `s_path` to the `scio_spec_measurement_config` at the beginning of the script. If you don't change the path the files will be saved to the current directory.
 
-The second provided example script `prep_data_for_ml.py` can be used for the conversion of a finished measurement.
+The example script `prep_data_for_ml.py` can be used for the conversion of a finished measurement.
 This script creates a new folder with the ending `_prepared` and puts together the potential values and object positions for all measurements. This could be useful for later application of machine learning. 
 
 ## Explanation of stored files (.npz)
-
 
 - `potential matrix` (e.g. variable P) is a 16x16 matrix (n_el=16). If you visualize it using `from sciopy import plot_potential_matrix` you can recognize the used excitation pattern or if an electrode is a defect.
 - `p_with_exc` is the matrix P with the excitation electrodes
@@ -35,14 +40,17 @@ This script creates a new folder with the ending `_prepared` and puts together t
 
 ## TBD
 
-- [ ] Communication using LAN connection.
-- [ ] Measurements using 48, 64 electrodes.
-- [ ] Adjacent and opposite injection pattern combination.
+- [x] Measurements using up to 64 electrodes.
+- [x] Measurements using the USB-HS port (Windows).
+- [x] Adjacent and opposite injection pattern combination.
 - [x] Measurements using 32 electrodes.
 - [x] Parsing measurements of 32 electrodes.
 - [x] Adjacent and opposite drive patterns for 32 electrodes.
 - [x] Measurement using 16 electrodes in opposite and adjacent injection pattern.
+- [ ] Communication using LAN connection.
 
 ## Contact
+
+If you have ideas or other advises don't hesitate to contact me!
 
 Email: jacob.thoenes@uni-rostock.de
