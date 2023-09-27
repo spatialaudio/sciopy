@@ -35,7 +35,7 @@ def SystemMessageCallback(
         "0x82": "Not-Acknowledge: Command could not be recognized",
         "0x83": "Command-Acknowledge: Command has been executed successfully",
         "0x84": "System-Ready Message: System is operational and ready to receive data",
-        "0x91": "Data holdup: Measurement data could not be sent via the master interface",
+        "0x92": "Data holdup: Measurement data could not be sent via the master interface",
     }
     timeout_count = 0
     received = []
@@ -293,7 +293,9 @@ def SetBurstCount(serial, cnf: ScioSpecMeasurementConfig) -> None:
     -------
     None
     """
-    serial.write(bytearray([0xB0, 0x03, 0x02, 0x00, hex(cnf.burst_count), 0xB0]))
+    serial.write(
+        bytearray([0xB0, 0x03, 0x02, 0x00, hex(cnf.burst_count), 0xB0])
+    )
     print(f"Set burst count to {cnf.burst_count}.")
     SystemMessageCallback(serial)
 
@@ -360,7 +362,9 @@ def del_hex_in_list(lst: list) -> np.ndarray:
     """
     return np.array(
         [
-            "0" + ele.replace("0x", "") if len(ele) == 1 else ele.replace("0x", "")
+            "0" + ele.replace("0x", "")
+            if len(ele) == 1
+            else ele.replace("0x", "")
             for ele in lst
         ]
     )
@@ -499,7 +503,9 @@ def parse_single_frame(lst_ele: np.ndarray) -> SingleFrame:
             bytesarray_to_float(lst_ele[i + 4 : i + 8]),
         )
 
-    excitation_stgs = np.array([single_hex_to_int(ele) for ele in lst_ele[3:5]])
+    excitation_stgs = np.array(
+        [single_hex_to_int(ele) for ele in lst_ele[3:5]]
+    )
 
     sgl_frm = SingleFrame(
         start_tag=lst_ele[0],
@@ -566,7 +572,9 @@ def reshape_full_message_in_bursts(
     # split in burst count messages
     split_length = lst.shape[0] // cnf.burst_count
     for split in range(cnf.burst_count):
-        split_list.append(lst[split * split_length : (split + 1) * split_length])
+        split_list.append(
+            lst[split * split_length : (split + 1) * split_length]
+        )
     return np.array(split_list)
 
 
@@ -594,7 +602,9 @@ def split_bursts_in_frames(
     burst_frame = []  # single burst count frame with channel depending frame
     subframe_length = split_list.shape[1] // msg_len
     for bursts in range(cnf.burst_count):  # Iterate over bursts
-        tmp_split_list = np.reshape(split_list[bursts], (subframe_length, msg_len))
+        tmp_split_list = np.reshape(
+            split_list[bursts], (subframe_length, msg_len)
+        )
         for subframe in range(subframe_length):
             parsed_sgl_frame = parse_single_frame(tmp_split_list[subframe])
             # Select the right channel group data
