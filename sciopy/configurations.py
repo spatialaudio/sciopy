@@ -121,11 +121,19 @@ def set_measurement_config(serial, ssms: ScioSpecMeasurementSetup) -> None:
 
     # Set injection config
 
-    el_inj = np.arange(1, ssms.n_el + 1)
-    el_gnd = np.roll(el_inj, -(ssms.inj_skip + 1))
+    if type(ssms.inj_skip) == int:
+        el_inj = np.arange(1, ssms.n_el + 1)
+        el_gnd = np.roll(el_inj, -(ssms.inj_skip + 1))
+        for v_el, g_el in zip(el_inj, el_gnd):
+            serial.write(bytearray([0xB0, 0x03, 0x06, v_el, g_el, 0xB0]))
 
-    for v_el, g_el in zip(el_inj, el_gnd):
-        serial.write(bytearray([0xB0, 0x03, 0x06, v_el, g_el, 0xB0]))
+    if type(ssms.inj_skip) == list:
+        for sgl_inj_skip in ssms.inj_skip:
+            el_inj = np.arange(1, ssms.n_el + 1)
+            el_gnd = np.roll(el_inj, -(sgl_inj_skip + 1))
+
+            for v_el, g_el in zip(el_inj, el_gnd):
+                serial.write(bytearray([0xB0, 0x03, 0x06, v_el, g_el, 0xB0]))
 
     # Get measurement setup
     serial.write(bytearray([0xB1, 0x01, 0x03, 0xB1]))

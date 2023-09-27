@@ -11,7 +11,7 @@ class ScioSpecMeasurementSetup:
     exc_freq: Union[int, float]
     framerate: Union[int, float]
     amplitude: Union[int, float]
-    inj_skip: int
+    inj_skip: Union[int, list]
     gain: int
     adc_range: int
     notes: str
