@@ -47,6 +47,7 @@ This script creates a new folder with the ending `_prepared` and puts together t
 - [x] Parsing measurements of 32 electrodes.
 - [x] Adjacent and opposite drive patterns for 32 electrodes.
 - [x] Measurement using 16 electrodes in opposite and adjacent injection pattern.
+- [x] Measure with injection pattern variations.
 - [ ] Communication using LAN connection.
 
 ## Contact
