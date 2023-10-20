@@ -38,17 +38,6 @@ This script creates a new folder with the ending `_prepared` and puts together t
 - `abs_v_norm_without_ext` is the voltage data, normalized between 0-1 without the excitation electrodes.
 - `config` contains some information regarding the measurement procedure.
 
-## TBD
-
-- [x] Measurements using up to 64 electrodes.
-- [x] Measurements using the USB-HS port (Windows).
-- [x] Adjacent and opposite injection pattern combination.
-- [x] Measurements using 32 electrodes.
-- [x] Parsing measurements of 32 electrodes.
-- [x] Adjacent and opposite drive patterns for 32 electrodes.
-- [x] Measurement using 16 electrodes in opposite and adjacent injection pattern.
-- [ ] Communication using LAN connection.
-
 ## Contact
 
 If you have ideas or other advises don't hesitate to contact me!

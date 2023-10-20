@@ -35,7 +35,7 @@ def SystemMessageCallback(
         "0x82": "Not-Acknowledge: Command could not be recognized",
         "0x83": "Command-Acknowledge: Command has been executed successfully",
         "0x84": "System-Ready Message: System is operational and ready to receive data",
-        "0x91": "Data holdup: Measurement data could not be sent via the master interface",
+        "0x92": "Data holdup: Measurement data could not be sent via the master interface",
     }
     timeout_count = 0
     received = []
