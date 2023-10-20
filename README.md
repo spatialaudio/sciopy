@@ -15,14 +15,14 @@ For a single measurement, you can simply run one of the `example` scripts using 
 
     python custom_measurement.py
 
-To fing the right port you can use:
+To find the right port you can use:
 
 
     from sciopy import available_serial_ports
     available_serial_ports()
 
 This script establishes a serial connection to the ScioSpec device, sends the measurement configuration, and starts a 
-measurement. For a successful measurement with 16 electordes, you have to plug in the 16 electrodes to the port "channel 1-16" at the ScioSpec device. For saving the data, set `save = True` and insert a valid `s_path` to the `scio_spec_measurement_config` at the beginning of the script. If you don't change the path the files will be saved to the current directory.
+measurement. For a successful measurement with 16 electrodes, you have to plug in the 16 electrodes to the port "channel 1-16" at the ScioSpec device. For saving the data, set `save = True` and insert a valid `s_path` to the `scio_spec_measurement_config` at the beginning of the script. If you don't change the path the files will be saved to the current directory.
 
 The example script `prep_data_for_ml.py` can be used for the conversion of a finished measurement.
 This script creates a new folder with the ending `_prepared` and puts together the potential values and object positions for all measurements. This could be useful for later application of machine learning. 
@@ -38,19 +38,8 @@ This script creates a new folder with the ending `_prepared` and puts together t
 - `abs_v_norm_without_ext` is the voltage data, normalized between 0-1 without the excitation electrodes.
 - `config` contains some information regarding the measurement procedure.
 
-## TBD
-
-- [x] Measurements using up to 64 electrodes.
-- [x] Measurements using the USB-HS port (Windows).
-- [x] Adjacent and opposite injection pattern combination.
-- [x] Measurements using 32 electrodes.
-- [x] Parsing measurements of 32 electrodes.
-- [x] Adjacent and opposite drive patterns for 32 electrodes.
-- [x] Measurement using 16 electrodes in opposite and adjacent injection pattern.
-- [ ] Communication using LAN connection.
-
 ## Contact
 
-If you have ideas or other advises don't hesitate to contact me!
+If you have ideas or other advice don't hesitate to contact me!
 
 Email: jacob.thoenes@uni-rostock.de
