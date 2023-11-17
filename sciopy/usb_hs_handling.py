@@ -239,7 +239,7 @@ def SystemMessageCallback_usb_hs(
         return received, received_hex
 
 
-def StartStopMeasurement_usb_hs(serial: Ftdi) -> list:
+def StartStopMeasurement_usb_hs(serial: Ftdi, print_msg: bool = False) -> list:
     """
     Start and stop the measurement and return the serial message buffer.
 
@@ -247,18 +247,22 @@ def StartStopMeasurement_usb_hs(serial: Ftdi) -> list:
     ----------
     serial : Ftdi
         USB-HS serial connection
+    print_msg : bool
+        print the start and stop message, by default False
 
     Returns
     -------
     list
         message buffer
     """
-    print("Starting measurement.")
+    if print_msg:
+        print("Starting measurement.")
     serial.write_data(bytearray([0xB4, 0x01, 0x01, 0xB4]))
     measurement_data_hex = SystemMessageCallback_usb_hs(
         serial, prnt_msg=False, ret_hex_int="hex"
     )
-    print("Stopping measurement.")
+    if print_msg:
+        print("Stopping measurement.")
     serial.write_data(bytearray([0xB4, 0x01, 0x00, 0xB4]))
     SystemMessageCallback_usb_hs(serial, prnt_msg=False, ret_hex_int="int")
     return measurement_data_hex
