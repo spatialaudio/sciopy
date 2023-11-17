@@ -1,4 +1,4 @@
-# ![sciopy](https://raw.githubusercontent.com/spatialaudio/sciopy/dev/doc/images/logo_sciopy.jpg)
+# ![sciopy](https://raw.githubusercontent.com/spatialaudio/sciopy/main/doc/images/logo_sciopy.jpg)
 
 This package offers the serial interface for communication with an EIT device from ScioSpec. Commands can be written serially and the system response can be read out. With the current version, it is possible to start and stop measurements with defined burst counts and to read out the measurement data. In addition, the measurement data is packed into a data class for better further processing.
 
@@ -15,14 +15,14 @@ For a single measurement, you can simply run one of the `example` scripts using 
 
     python custom_measurement.py
 
-To fing the right port you can use:
+To find the right port you can use:
 
 
     from sciopy import available_serial_ports
     available_serial_ports()
 
 This script establishes a serial connection to the ScioSpec device, sends the measurement configuration, and starts a 
-measurement. For a successful measurement with 16 electordes, you have to plug in the 16 electrodes to the port "channel 1-16" at the ScioSpec device. For saving the data, set `save = True` and insert a valid `s_path` to the `scio_spec_measurement_config` at the beginning of the script. If you don't change the path the files will be saved to the current directory.
+measurement. For a successful measurement with 16 electrodes, you have to plug in the 16 electrodes to the port "channel 1-16" at the ScioSpec device. For saving the data, set `save = True` and insert a valid `s_path` to the `scio_spec_measurement_config` at the beginning of the script. If you don't change the path the files will be saved to the current directory.
 
 The example script `prep_data_for_ml.py` can be used for the conversion of a finished measurement.
 This script creates a new folder with the ending `_prepared` and puts together the potential values and object positions for all measurements. This could be useful for later application of machine learning. 
@@ -40,6 +40,6 @@ This script creates a new folder with the ending `_prepared` and puts together t
 
 ## Contact
 
-If you have ideas or other advises don't hesitate to contact me!
+If you have ideas or other advice don't hesitate to contact me!
 
 Email: jacob.thoenes@uni-rostock.de

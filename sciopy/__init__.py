@@ -15,6 +15,13 @@ from .com_handling import (
     disconnect_COM_port,
 )
 
+from .usb_hs_handling import (
+    connect_COM_port_usb_hs,
+    set_measurement_config_usb_hs,
+    SystemMessageCallback_usb_hs,
+    StartStopMeasurement_usb_hs,
+)
+
 from .print_command_info import (
     print_syntax,
     print_general_system_messages,
@@ -111,6 +118,11 @@ __all__ = [
     "connect_COM_port",
     "serial_write",
     "disconnect_COM_port",
+    # .usb_hs_handling
+    "connect_COM_port_usb_hs",
+    "set_measurement_config_usb_hs",
+    "SystemMessageCallback_usb_hs",
+    "StartStopMeasurement_usb_hs",
     # .print_command_info
     "print_syntax",
     "print_general_system_messages",
