@@ -275,12 +275,10 @@ def SoftwareReset_usb_hs(serial: Ftdi, print_msg: bool = True) -> None:
 
     Parameters
     ----------
-    serial :
-        serial connection
-
-    Returns
-    -------
-    None
+    serial : Ftdi
+        USB-HS serial connection
+    print_msg : bool, optional
+        print the callback message, by default True
     """
     serial.write_data(bytearray([0xA1, 0x00, 0xA1]))
     time.sleep(5)
