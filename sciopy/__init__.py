@@ -20,6 +20,7 @@ from .usb_hs_handling import (
     set_measurement_config_usb_hs,
     SystemMessageCallback_usb_hs,
     StartStopMeasurement_usb_hs,
+    SoftwareReset_usb_hs,
 )
 
 from .print_command_info import (
@@ -123,6 +124,7 @@ __all__ = [
     "set_measurement_config_usb_hs",
     "SystemMessageCallback_usb_hs",
     "StartStopMeasurement_usb_hs",
+    "SoftwareReset_usb_hs",
     # .print_command_info
     "print_syntax",
     "print_general_system_messages",
