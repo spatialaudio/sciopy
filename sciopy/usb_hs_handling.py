@@ -282,4 +282,4 @@ def SoftwareReset_usb_hs(serial: Ftdi, print_msg: bool = True) -> None:
     """
     serial.write_data(bytearray([0xA1, 0x00, 0xA1]))
     time.sleep(5)
-    SystemMessageCallback_usb_hs(serial, print_msg=print_msg)
+    SystemMessageCallback_usb_hs(serial, print_msg)
