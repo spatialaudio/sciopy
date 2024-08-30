@@ -1,5 +1,6 @@
 from pyftdi.ftdi import Ftdi
 import struct
+import time
 from typing import Union
 from sciopy.sciopy_dataclasses import (
     ScioSpecMeasurementSetup,
@@ -266,3 +267,19 @@ def StartStopMeasurement_usb_hs(serial: Ftdi, print_msg: bool = False) -> list:
     serial.write_data(bytearray([0xB4, 0x01, 0x00, 0xB4]))
     SystemMessageCallback_usb_hs(serial, prnt_msg=False, ret_hex_int="int")
     return measurement_data_hex
+
+
+def SoftwareReset_usb_hs(serial: Ftdi, print_msg: bool = True) -> None:
+    """
+    Reset the ScioSpec device.
+
+    Parameters
+    ----------
+    serial : Ftdi
+        USB-HS serial connection
+    print_msg : bool, optional
+        print the callback message, by default True
+    """
+    serial.write_data(bytearray([0xA1, 0x00, 0xA1]))
+    time.sleep(5)
+    SystemMessageCallback_usb_hs(serial, print_msg)

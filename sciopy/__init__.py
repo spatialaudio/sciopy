@@ -8,6 +8,7 @@ from .doteit import (
     convert_fulldir_doteit_to_npz,
 )
 
+
 from .com_handling import (
     available_serial_ports,
     connect_COM_port,
@@ -20,6 +21,7 @@ from .usb_hs_handling import (
     set_measurement_config_usb_hs,
     SystemMessageCallback_usb_hs,
     StartStopMeasurement_usb_hs,
+    SoftwareReset_usb_hs,
 )
 
 from .print_command_info import (
@@ -102,6 +104,8 @@ from .meshing import (
     mesh_sample,
 )
 
+from .sciospec_hs import sciospec_measurement
+
 # TBD from .configurations import configuration_01
 
 __all__ = [
@@ -123,6 +127,7 @@ __all__ = [
     "set_measurement_config_usb_hs",
     "SystemMessageCallback_usb_hs",
     "StartStopMeasurement_usb_hs",
+    "SoftwareReset_usb_hs",
     # .print_command_info
     "print_syntax",
     "print_general_system_messages",
@@ -190,4 +195,6 @@ __all__ = [
     "add_circle_anomaly",
     "plot_mesh",
     "mesh_sample",
+    # .sciospec_hs
+    "sciospec_measurement",
 ]
