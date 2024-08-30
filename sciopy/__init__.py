@@ -8,6 +8,7 @@ from .doteit import (
     convert_fulldir_doteit_to_npz,
 )
 
+
 from .com_handling import (
     available_serial_ports,
     connect_COM_port,
@@ -103,6 +104,8 @@ from .meshing import (
     mesh_sample,
 )
 
+from .sciospec_hs import sciospec_measurement
+
 # TBD from .configurations import configuration_01
 
 __all__ = [
@@ -192,4 +195,6 @@ __all__ = [
     "add_circle_anomaly",
     "plot_mesh",
     "mesh_sample",
+    # .sciospec_hs
+    "sciospec_measurement",
 ]
