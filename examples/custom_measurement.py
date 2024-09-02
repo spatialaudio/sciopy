@@ -1,7 +1,6 @@
 import numpy as np
 
 from sciopy import (
-    SystemMessageCallback,
     sciospec_measurement,
     connect_COM_port_usb_hs,
     set_measurement_config_usb_hs,
@@ -12,8 +11,10 @@ from sciopy.sciopy_dataclasses import ScioSpecMeasurementSetup
 
 s_path = ""
 
+# connect device
 Sciospec = connect_COM_port_usb_hs()
 
+# configuration
 ssms = ScioSpecMeasurementSetup(
     burst_count=1,  # The number of measurements to be performed.
     total_meas_num=1,  # Repetitions of burst count
@@ -31,10 +32,11 @@ ssms = ScioSpecMeasurementSetup(
     notes="test measurement",  # add measurement information
     configured=True,
 )
-
+# write config to device
 set_measurement_config_usb_hs(Sciospec, ssms)
 SystemMessageCallback_usb_hs(Sciospec, prnt_msg=True)
 
+# measurement
 sciospec_data = sciospec_measurement(Sciospec, ssms)
 
 file_idx = 0
@@ -45,4 +47,3 @@ for bursts in sciospec_data:
         data=bursts,
     )
     file_idx += 1
-SystemMessageCallback(COM_ScioSpec, prnt_msg=False)
